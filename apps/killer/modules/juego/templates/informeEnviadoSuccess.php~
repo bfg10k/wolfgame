@@ -1,0 +1,3 @@
+Espera a que la víctima confirme su asesinato. Métele prisa si hace falta.
+<a href="<?php echo url_for('juego/index'); ?>">Aceptar</a>
+

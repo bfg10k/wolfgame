@@ -1,0 +1,110 @@
+<div id="salir"> <a href="<?php echo url_for('juego/salir'); ?>" class="btn btn-info">Salir</a> </div>
+<div id="user">            
+    <h3>Bienvenido <?php echo $nombre ?></h3>
+</div>
+
+  <form class="form-horizontal" enctype="multipart/form-data" method="post" action="<?php echo url_for('juego/grabarDatos'); ?>">
+    <fieldset>
+      <div id="legend" class="">
+        <legend class="">Edita tu perfil</legend>
+      </div>
+        
+        <?php echo $aviso; ?>
+        
+        
+    <div class="control-group">
+
+          <!-- Text input-->
+          <label class="control-label" for="input01">Nombre</label>
+          <div class="controls">
+            <input type="text" name="nombre" value="<?php echo $nombre;?>" placeholder="tu nombre real" class="input-xlarge">
+            <p class="help-block">Tu nombre real para que puedan identificarte junto con el departamento</p>
+          </div>
+        </div><div class="control-group">
+
+          <!-- Select Basic -->
+          <label class="control-label">Departamento</label>
+          <div class="controls">
+            <select name="departamento" class="input-xlarge">
+            <option value="">(Indica tu departamento)</option>
+            <?php foreach($departamentos as $dep): ?>
+                <?php if($dep->getId() == $departamento): ?>
+                <option value="<?php echo $dep->getId(); ?>" selected="selected"><?php echo $dep->getDepartamento(); ?></option>
+                <?php else: ?>
+                <option value="<?php echo $dep->getId(); ?>"><?php echo $dep->getDepartamento(); ?></option>
+                <?php endif?>
+            <?php endforeach ?>
+            </select>    
+          </div>
+
+        </div><div class="control-group">
+
+          <!-- Text input-->
+          <label class="control-label" for="input01">Alias</label>
+          <div class="controls">
+            <input type="text" name="alias" value="<?php echo $alias;?>" placeholder="alias" class="input-xlarge">
+            <p class="help-block">Un alias mafioso/divertido para que nadie pueda identificarte</p>
+          </div>
+        </div><div class="control-group">
+
+          <!-- Text input-->
+          <label class="control-label" for="input01">Biografía</label>
+          <div class="controls">
+            <textarea name="biografia" rows="8" class="input-xlarge" placeholder="escribe tu biografía" ></textarea>
+            <p class="help-block">Escribe una breve biografía para que salga en tu ficha de asesino</p>
+          </div>
+        </div><div class="control-group">
+          <label class="control-label">Sube una foto (max. 100k)</label>
+
+          <!-- File Upload -->
+          <div class="controls">
+            <input name="foto" class="input-file" id="fileInput" type="file">
+          </div>
+        </div>
+
+    <div class="control-group">
+
+          <!-- Text input-->
+          <label class="control-label" for="input01">Usuario</label>
+          <div class="controls">
+            <input type="text" name="usuario" placeholder="placeholder" class="input-xlarge">
+            <p class="help-block"></p>
+          </div>
+        </div><div class="control-group">
+
+          <!-- Text input-->
+          <label class="control-label" for="contrasena">Contraseña</label>
+          <div class="controls">
+            <input type="password" name="contrasena" placeholder="placeholder" class="input-xlarge">
+            <p class="help-block"></p>
+          </div>
+        </div><div class="control-group">
+
+          <!-- Text input-->
+          <label class="control-label" for="input01">Repite la contraseña</label>
+          <div class="controls">
+            <input type="password" name="contrasena2" placeholder="placeholder" class="input-xlarge">
+            <p class="help-block"></p>
+          </div>
+        </div><div class="control-group">
+
+          <!-- Text input-->
+          <label class="control-label" for="input01">Email</label>
+          <div class="controls">
+            <input type="text" name="email" placeholder="email" class="input-xlarge">
+            <p class="help-block">El de aquí o uno personal, como tú prefieras.</p>
+          </div>
+        </div><div class="control-group">
+          <label class="control-label"></label>
+
+          <!-- Button -->
+          <div class="controls">
+            <button class="btn btn-success">Aceptar</button>
+          </div>
+        </div>
+
+    
+
+    </fieldset>
+  </form>
+

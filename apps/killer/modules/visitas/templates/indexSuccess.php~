@@ -1,0 +1,20 @@
+<div id="nav">
+          <ul class="nav nav-tabs">
+            <li class="active"><a href="<?php echo url_for('visitas/index'); ?>">Jugadores</a></li>
+            <li><a href="<?php echo url_for('visitas/blog'); ?>">Killer News</a></li>
+            <li><a href="<?php echo url_for('visitas/normas'); ?>">Normativa</a></li>
+                      
+          </ul>
+</div>
+
+<h1>Jugadores</h1>
+
+<?php foreach($jugadores as $jugador): ?>  
+ <div style="float:left; margin:10px;">
+   <img src="<?php echo image_path('killer_misterioso_peq.jpg'); ?>" />
+ </div>	
+<?php endforeach ?>
+
+
+
+

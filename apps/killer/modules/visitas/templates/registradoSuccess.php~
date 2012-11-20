@@ -1,0 +1,41 @@
+<form class="form-horizontal" action='<?php echo url_for('juego/index'); ?>' method="POST">
+  <fieldset>
+    <div id="legend">
+      <legend class="">Login</legend>
+    </div>
+    <div class="control-group">
+      <!-- Username -->
+      <label class="control-label"  for="username">Username</label>
+      <div class="controls">
+        <input type="text" id="username" name="username" placeholder="" class="input-xlarge">
+      </div>
+    </div>
+ 
+    <div class="control-group">
+      <!-- Password-->
+      <label class="control-label" for="password">Password</label>
+      <div class="controls">
+        <input type="password" id="password" name="password" placeholder="" class="input-xlarge">
+      </div>
+    </div>
+ 
+ 
+    <div class="control-group">
+      <!-- Button -->
+      <div class="controls">
+        <button type="submit" class="btn btn-success">Login</button>
+        <button type="button" class="btn btn-info">Registro</button>
+      </div>
+    </div>
+  </fieldset>
+</form>
+
+<ul class="nav nav-tabs">
+  <li class="active">
+    <a href="#">Jugadores</a>
+  </li>
+  <li><a href="#">Killer News</a></li>
+  <li><a href="#">Normativa</a></li>
+</ul>
+
+

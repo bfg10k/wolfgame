@@ -1,0 +1,145 @@
+body {
+        padding:0;
+	padding-bottom:20px;
+	margin: 0;
+	font-size:100%;
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+	text-align: justify;
+	line-height:110%;
+	color:#333;
+        background-color:#FFF;
+        background-image:url(../images/blood_usb.jpg);
+	background-repeat:no-repeat;
+        background-position:center top;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+	
+}
+
+#header{
+	/*height:60px;*/
+	width:1024px;
+	height:156px;
+	background-image:url(../images/killer.png);
+	background-repeat:no-repeat;
+	background-position:0 0;
+	margin:0 auto;
+}
+
+#nav{
+	width:1024px;
+	margin:0 auto;
+	padding:20px 0 0 0;
+	
+}
+
+#nav_login{
+        padding-top: 30px;
+        float:right;
+}
+
+#nav-user{
+        width: 200px;
+        float: left;
+        clear: both;
+}
+
+#user{
+        float: right;
+        display: block;
+        margin: 15px 15px 10px;
+             
+        
+}
+
+#contador{
+        display: block;
+        padding-top: 30px;
+        float:right;
+        clear:both;
+}
+
+#content_killer{
+	width:1024px;
+	font-size:100%;
+	margin:0 auto;
+    	background: url("../images/content-background.png") repeat scroll 0 0 transparent;
+     	border: 1px solid #FFFFFF;
+    	min-height: 500px;
+    	padding-bottom: 25px;    		
+}
+
+#main_content{        
+        margin: 0 25px 0 15px;
+        
+}
+
+#main_content h1, #content-user h1{
+        font-family: Oswald;
+        font-weight: 700;
+        color: #751313;
+}
+
+#main_content h2, #content-user h2{
+        font-family: Oswald;
+        font-weight: 300;
+        margin: 20px 0 15px 0;
+
+}
+
+#content-user h3{
+        font-family: Oswald;
+        font-weight: 200;
+
+}
+
+
+#content-objetivo{
+        width: 800px;
+        margin: 0 15px 0 auto;
+        background-color: #F5F5F5;
+        border-style: solid;
+        border-color: #D3D3D3;
+        border-width: 1px;
+        display: block;
+        float: right;
+        padding-right: 10px;
+}
+
+#content-user{
+        width: 800px;
+        margin: 0 15px 0 auto;
+        display: block;
+        float: right;
+}
+/* Clearing the float */
+.autoclear:after{
+	content: "";
+	display:block;
+	height:0;
+	clear:both;
+}
+
+.autoclear{
+	height:100%;
+}
+
+.alpha75 {
+        opacity: 0.75;
+        filter:alpha(opacity=75);
+}
+
+.alpha25 {
+        opacity: 0.25;
+        filter:alpha(opacity=25);
+}
+
+.rounded-corners{
+    border-radius: 10px;
+    -mz-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -khtml-border-radius: 10px;
+}

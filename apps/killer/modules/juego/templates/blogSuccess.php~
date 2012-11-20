@@ -1,0 +1,28 @@
+<div id="salir"> <a href="<?php echo url_for('juego/salir'); ?>" class="btn btn-info">Salir</a> </div>
+<div id="user">            
+    <h3>Bienvenido <?php echo $nombre ?></h3>
+</div>
+
+<div id="nav-user">
+    <ul class="nav nav-list">
+    <li><a href="<?php echo url_for('juego/index'); ?>"><i class="icon-home icon-white"></i> Inicio</a></li>
+    <li><a href="<?php echo url_for('juego/rueda'); ?>"><i class="icon-screenshot"></i> Rueda de objetivos</a></li>
+    <li class="active"><a href="<?php echo url_for('juego/blog'); ?>"><i class="icon-eye-open"></i> Killer News</a></li>
+    <li><a href="<?php echo url_for('juego/normas'); ?>"><i class="icon-align-justify"></i> Normativa</a></li>
+    </ul>
+</div>
+
+<div>
+<?php foreach($noticias as $noticia): ?>
+
+<div class="span8">
+    <h1><?php echo $noticia->getTitulo(); ?></h1>
+    <p><?php echo $noticia->getNoticia(); ?></p>
+    <div>
+        <span class="badge badge-success">Posted 2012-08-02 20:47:04</span>
+    </div> 
+    <hr>
+</div>
+
+<?php endforeach ?>
+</div>

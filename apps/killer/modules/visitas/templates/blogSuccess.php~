@@ -1,0 +1,17 @@
+<div id="nav">
+          <ul class="nav nav-tabs">
+            <li ><a href="<?php echo url_for('visitas/index'); ?>">Jugadores</a></li>
+            <li class="active"><a href="<?php echo url_for('visitas/blog'); ?>">Killer News</a></li>
+            <li><a href="<?php echo url_for('visitas/normas'); ?>">Normativa</a></li>
+                      
+          </ul>
+</div>
+
+<div>
+
+<p class="text-info">Todavía no hay entradas en el blog.</p>
+
+
+</div>
+
+
