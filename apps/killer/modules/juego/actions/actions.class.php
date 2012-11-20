@@ -21,9 +21,9 @@ class juegoActions extends sfActions {
             $this->redirect('visitas/index');
 
         $c = new Criteria();
-        $c->add(KillJugadoresPeer::ID, $id_jugador);
-        $jugador = KillJugadoresPeer::doSelectOne($c);
-        if (!($jugador instanceof KillJugadores)) {
+        $c->add(HlJugadoresPeer::ID, $id_jugador);
+        $jugador = HlJugadoresPeer::doSelectOne($c);
+        if (!($jugador instanceof HlJugadores)) {
             $this->redirect('visitas/index');
         }
 
@@ -33,26 +33,76 @@ class juegoActions extends sfActions {
             $this->nombre = $jugador->getNombre();
             return "Success";
         }
-
-
-        $victima = $jugador->getKillJugadoresRelatedByIdVictima();
-        if ($victima instanceof KillJugadores) {
-            $victima->getActivo();
-
-            while (!$victima->getActivo()) {
-                $victima = $victima->getKillJugadoresRelatedByIdVictima();
-            }
-        } else {//No se ha realizado el sorteo todavía. Instanciamos un Jugador anónimo.
-            $victima = new KillJugadores();
-            $victima->setNombre("?????");
-            $victima->setAlias("?????");
-            $victima->setDescripcion("");
-            $victima->setFoto("killer_misterioso_peq.jpg");
-        }
-
+        
         $this->jugador = $jugador;
         $this->nombre = $jugador->getNombre();
-        $this->victima = $victima;
+        
+        $fase="dia";
+        switch($fase)
+        {
+          case "noche":
+            $this->setTemplate("noche");
+            break;
+          case "dia":
+            $this->votos = HlVotosPeer::doSelect(new Criteria());
+            $this->setTemplate("dia");
+        }
+        
+        $rol="lobo";
+        switch ($rol) {
+          case "lobo":
+            $c = new Criteria();
+            $c->add(HlJugadoresPeer::ACTIVO,1);
+            $this->selectJugadoresVivos = new sfWidgetFormPropelChoice(array('model'=>'HlJugadores','criteria'=>$c));
+            return "Lobo";
+            break;
+          
+          case "alcalde":
+            return "Alcalde";
+            break;
+          
+          case "vidente":
+            return "Vidente";
+            break;
+          
+          case "enamorado":
+            return "Enamorado";
+            break;  
+          
+          default:
+            return "Pueblerino";
+            break;
+        }
+          
+        
+    }
+    
+    public function executeVotar(sfWebRequest $request)
+    {
+      $id_jugador = $this->getUser()->getAttribute('user_id', null);
+        if (is_null($id_jugador))
+            $this->redirect('visitas/index');
+
+        $c = new Criteria();
+        $c->add(HlJugadoresPeer::ID, $id_jugador);
+        $jugador = HlJugadoresPeer::doSelectOne($c);
+        if (!($jugador instanceof HlJugadores)) {
+            $this->redirect('visitas/index');
+        }
+        
+        $id_victima = $request->getParameter('id_victima');
+        $c = new Criteria();
+        $c->add(HlVotosPeer::ID_JUGADOR,$id_jugador);
+        $voto = HlVotosPeer::doSelectOne($c);
+        if(!($voto instanceof HlVotos))
+        {
+          $voto = new HlVotos();
+          $voto->setIdJugador($id_jugador);
+        }
+        $voto->setIdVictima($id_victima);
+        $voto->save();
+        
+        $this->redirect('juego/index');
     }
 
     public function executeSortear(sfWebRequest $request) {
@@ -61,14 +111,14 @@ class juegoActions extends sfActions {
             $this->redirect('visitas/index');
 
         $c = new Criteria();
-        $c->add(KillJugadoresPeer::ID, $id_jugador);
-        $jugador = KillJugadoresPeer::doSelectOne($c);
-        if (!($jugador instanceof KillJugadores)) {
+        $c->add(HlJugadoresPeer::ID, $id_jugador);
+        $jugador = HlJugadoresPeer::doSelectOne($c);
+        if (!($jugador instanceof HlJugadores)) {
             $this->redirect('visitas/index');
         }
 
         if ($jugador->getIdVictima() == 0) {//Solamente en este caso se realiza el sorteo
-            $todos = KillJugadoresPeer::doSelect(new Criteria());
+            $todos = HlJugadoresPeer::doSelect(new Criteria());
             foreach ($todos as $asesino) {
                 $arrayasesinos[$asesino->getId()] = $asesino->getIdDepartamento();
             }
@@ -79,7 +129,7 @@ class juegoActions extends sfActions {
 
             $orden = array_keys($arraysorteado);
             foreach ($orden as $pos => $idJugador) {
-                $jugador = KillJugadoresPeer::retrieveByPK($idJugador);
+                $jugador = HlJugadoresPeer::retrieveByPK($idJugador);
                 $jugador->setIdVictima($orden[($pos + 1) % count($orden)]);
                 $jugador->save();
             }
@@ -119,9 +169,9 @@ class juegoActions extends sfActions {
             $this->redirect('visitas/index');
 
         $c = new Criteria();
-        $c->add(KillJugadoresPeer::ID, $id_jugador);
-        $jugador = KillJugadoresPeer::doSelectOne($c);
-        if (!($jugador instanceof KillJugadores)) {
+        $c->add(HlJugadoresPeer::ID, $id_jugador);
+        $jugador = HlJugadoresPeer::doSelectOne($c);
+        if (!($jugador instanceof HlJugadores)) {
             $this->redirect('visitas/index');
         }
         $this->nombre = $jugador->getNombre();
@@ -142,9 +192,9 @@ class juegoActions extends sfActions {
             $this->redirect('visitas/index');
 
         $c = new Criteria();
-        $c->add(KillJugadoresPeer::ID, $id_jugador);
-        $jugador = KillJugadoresPeer::doSelectOne($c);
-        if (!($jugador instanceof KillJugadores)) {
+        $c->add(HlJugadoresPeer::ID, $id_jugador);
+        $jugador = HlJugadoresPeer::doSelectOne($c);
+        if (!($jugador instanceof HlJugadores)) {
             $this->redirect('visitas/index');
         }
 
@@ -176,25 +226,25 @@ class juegoActions extends sfActions {
         }
 
         //Si va bien -> redirigir a executeInformeEnviado
-        $victima = $jugador->getKillJugadoresRelatedByIdVictima();
-        if ($victima instanceof KillJugadores) {
+        $victima = $jugador->getHlJugadoresRelatedByIdVictima();
+        if ($victima instanceof HlJugadores) {
             $victima->getActivo();
 
             while (!$victima->getActivo()) {
-                $victima = $victima->getKillJugadoresRelatedByIdVictima();
+                $victima = $victima->getHlJugadoresRelatedByIdVictima();
             }
         }
         $victima->setConfirmacionMuerte(1);
         $victima->save();
 
-        $noticia = new KillNoticias();
+        $noticia = new HlNoticias();
         $noticia->setIdJugador($jugador->getId());
         $noticia->setTitulo($titulo);
         $noticia->setNoticia($relato);
         $noticia->setFecha(date());
         $noticia->save();
 
-        $muerte = new KillMuertes();
+        $muerte = new HlMuertes();
         $muerte->setIdAsesino($jugador->getId());
         $muerte->setIdVictima($jugador->getIdVictima());
         $muerte->setArma($arma);
@@ -216,9 +266,9 @@ class juegoActions extends sfActions {
             $this->redirect('visitas/index');
 
         $c = new Criteria();
-        $c->add(KillJugadoresPeer::ID, $id_jugador);
-        $jugador = KillJugadoresPeer::doSelectOne($c);
-        if (!($jugador instanceof KillJugadores)) {
+        $c->add(HlJugadoresPeer::ID, $id_jugador);
+        $jugador = HlJugadoresPeer::doSelectOne($c);
+        if (!($jugador instanceof HlJugadores)) {
             $this->redirect('visitas/index');
         }
         $this->nombre = $jugador->getNombre();
@@ -235,9 +285,9 @@ class juegoActions extends sfActions {
             $this->redirect('visitas/index');
 
         $c = new Criteria();
-        $c->add(KillJugadoresPeer::ID, $id_jugador);
-        $jugador = KillJugadoresPeer::doSelectOne($c);
-        if (!($jugador instanceof KillJugadores)) {
+        $c->add(HlJugadoresPeer::ID, $id_jugador);
+        $jugador = HlJugadoresPeer::doSelectOne($c);
+        if (!($jugador instanceof HlJugadores)) {
             $this->redirect('visitas/index');
         }
         $this->nombre = $jugador->getNombre();
@@ -261,9 +311,9 @@ class juegoActions extends sfActions {
             $this->redirect('visitas/index');
 
         $c = new Criteria();
-        $c->add(KillJugadoresPeer::ID, $id_jugador);
-        $jugador = KillJugadoresPeer::doSelectOne($c);
-        if (!($jugador instanceof KillJugadores)) {
+        $c->add(HlJugadoresPeer::ID, $id_jugador);
+        $jugador = HlJugadoresPeer::doSelectOne($c);
+        if (!($jugador instanceof HlJugadores)) {
             $this->redirect('visitas/index');
         }
         $this->nombre = $jugador->getNombre();
@@ -286,16 +336,16 @@ class juegoActions extends sfActions {
             $this->redirect('visitas/index');
 
         $c = new Criteria();
-        $c->add(KillJugadoresPeer::ID, $id_jugador);
-        $jugador = KillJugadoresPeer::doSelectOne($c);
-        if (!($jugador instanceof KillJugadores)) {
+        $c->add(HlJugadoresPeer::ID, $id_jugador);
+        $jugador = HlJugadoresPeer::doSelectOne($c);
+        if (!($jugador instanceof HlJugadores)) {
             $this->redirect('visitas/index');
         }
 
         $this->nombre = $jugador->getNombre();
 
 //    //Antes del sorteo vale esta consulta
-//    $this->jugadores = KillJugadoresPeer::doSelect(new Criteria());
+//    $this->jugadores = HlJugadoresPeer::doSelect(new Criteria());
 //    $this->numJugadores = count($this->jugadores);
 //    $this->setTemplate('ruedaNoSorteo');
 //    return "Success"; 
@@ -305,24 +355,24 @@ class juegoActions extends sfActions {
             $this->redirect('visitas/index');
 
         $c = new Criteria();
-        $c->add(KillJugadoresPeer::ID, $id_jugador);
-        $jugador = KillJugadoresPeer::doSelectOne($c);
-        if (!($jugador instanceof KillJugadores)) {
+        $c->add(HlJugadoresPeer::ID, $id_jugador);
+        $jugador = HlJugadoresPeer::doSelectOne($c);
+        if (!($jugador instanceof HlJugadores)) {
             $this->redirect('visitas/index');
         }
 
         $this->jugador = $jugador;
         $this->otrosjugadores = array();
         $this->muertos = array();
-        $jugador = $jugador->getKillJugadoresRelatedByIdVictima();
+        $jugador = $jugador->getHlJugadoresRelatedByIdVictima();
         do {
             //$this->jugadores[] = array('id'=>$jugador->getId(),'alias'=>$jugador->getAlias(),'foto'=>$jugador->getFoto());
             if ($jugador->getActivo() === 1) {
                 $this->otrosjugadores[] = $jugador;
             }else{
-                $this->muertos[$jugador->countKillMuertessRelatedByIdAsesino()][] = $jugador;
+                $this->muertos[$jugador->countHlMuertessRelatedByIdAsesino()][] = $jugador;
             }
-            $jugador = $jugador->getKillJugadoresRelatedByIdVictima();
+            $jugador = $jugador->getHlJugadoresRelatedByIdVictima();
         } while ($jugador->getId() != $id_jugador);
 
     }
@@ -338,9 +388,9 @@ class juegoActions extends sfActions {
             $this->redirect('visitas/index');
 
         $c = new Criteria();
-        $c->add(KillJugadoresPeer::ID, $id_jugador);
-        $jugador = KillJugadoresPeer::doSelectOne($c);
-        if (!($jugador instanceof KillJugadores)) {
+        $c->add(HlJugadoresPeer::ID, $id_jugador);
+        $jugador = HlJugadoresPeer::doSelectOne($c);
+        if (!($jugador instanceof HlJugadores)) {
             $this->redirect('visitas/index');
         }
 
@@ -348,8 +398,8 @@ class juegoActions extends sfActions {
 
 
         $criteria = new Criteria();
-        $criteria->addDescendingOrderByColumn(KillNoticiasPeer::ID);
-        $this->noticias = KillNoticiasPeer::doSelect($criteria);
+        $criteria->addDescendingOrderByColumn(HlNoticiasPeer::ID);
+        $this->noticias = HlNoticiasPeer::doSelect($criteria);
     }
 
     /**
@@ -363,9 +413,9 @@ class juegoActions extends sfActions {
             $this->redirect('visitas/index');
 
         $c = new Criteria();
-        $c->add(KillJugadoresPeer::ID, $id_jugador);
-        $jugador = KillJugadoresPeer::doSelectOne($c);
-        if (!($jugador instanceof KillJugadores)) {
+        $c->add(HlJugadoresPeer::ID, $id_jugador);
+        $jugador = HlJugadoresPeer::doSelectOne($c);
+        if (!($jugador instanceof HlJugadores)) {
             $this->redirect('visitas/index');
         }
 
@@ -374,11 +424,11 @@ class juegoActions extends sfActions {
 
         $texto = $request->getParameter('texto');
         if (!empty($texto)) {
-            $noticia = KillNoticiasPeer::retrieveByPK($request->getParameter('id_noticia', null));
-            if ($noticia instanceof KillNoticias) {
-                $comentario = new KillComentarios();
+            $noticia = HlNoticiasPeer::retrieveByPK($request->getParameter('id_noticia', null));
+            if ($noticia instanceof HlNoticias) {
+                $comentario = new HlComentarios();
                 $comentario->setTexto($texto);
-                $noticia->addKillComentarios($comentario);
+                $noticia->addHlComentarios($comentario);
                 $noticia->save();
             }
         }
@@ -396,9 +446,9 @@ class juegoActions extends sfActions {
             $this->redirect('visitas/index');
 
         $c = new Criteria();
-        $c->add(KillJugadoresPeer::ID, $id_jugador);
-        $jugador = KillJugadoresPeer::doSelectOne($c);
-        if (!($jugador instanceof KillJugadores)) {
+        $c->add(HlJugadoresPeer::ID, $id_jugador);
+        $jugador = HlJugadoresPeer::doSelectOne($c);
+        if (!($jugador instanceof HlJugadores)) {
             $this->redirect('visitas/index');
         }
 
@@ -416,9 +466,9 @@ class juegoActions extends sfActions {
             $this->redirect('visitas/index');
 
         $c = new Criteria();
-        $c->add(KillJugadoresPeer::ID, $id_jugador);
-        $jugador = KillJugadoresPeer::doSelectOne($c);
-        if (!($jugador instanceof KillJugadores)) {
+        $c->add(HlJugadoresPeer::ID, $id_jugador);
+        $jugador = HlJugadoresPeer::doSelectOne($c);
+        if (!($jugador instanceof HlJugadores)) {
             $this->redirect('visitas/index');
         }
 
@@ -437,7 +487,7 @@ class juegoActions extends sfActions {
             $this->redirect($forward_error);
         }
 
-        $noticia = new KillNoticias();
+        $noticia = new HlNoticias();
         $noticia->setIdJugador($jugador->getId());
         $noticia->setTitulo($titulo);
         $noticia->setNoticia($relato);
@@ -453,9 +503,9 @@ class juegoActions extends sfActions {
             $this->redirect('visitas/index');
 
         $c = new Criteria();
-        $c->add(KillJugadoresPeer::ID, $id_jugador);
-        $jugador = KillJugadoresPeer::doSelectOne($c);
-        if (!($jugador instanceof KillJugadores)) {
+        $c->add(HlJugadoresPeer::ID, $id_jugador);
+        $jugador = HlJugadoresPeer::doSelectOne($c);
+        if (!($jugador instanceof HlJugadores)) {
             $this->redirect('visitas/index');
         }
 
@@ -468,14 +518,14 @@ class juegoActions extends sfActions {
             $this->redirect('visitas/index');
 
         $c = new Criteria();
-        $c->add(KillJugadoresPeer::ID, $id_jugador);
-        $jugador = KillJugadoresPeer::doSelectOne($c);
-        if (!($jugador instanceof KillJugadores)) {
+        $c->add(HlJugadoresPeer::ID, $id_jugador);
+        $jugador = HlJugadoresPeer::doSelectOne($c);
+        if (!($jugador instanceof HlJugadores)) {
             $this->redirect('visitas/index');
         }
 
         $criteria = new Criteria();
-        $this->departamentos = KillDepartamentosPeer::doSelect($criteria);
+        $this->departamentos = HlDepartamentosPeer::doSelect($criteria);
 
         $this->aviso = $this->getUser()->getFlash('notice');
 
@@ -494,9 +544,9 @@ class juegoActions extends sfActions {
             $this->redirect('visitas/index');
 
         $c = new Criteria();
-        $c->add(KillJugadoresPeer::ID, $id_jugador);
-        $jugador = KillJugadoresPeer::doSelectOne($c);
-        if (!($jugador instanceof KillJugadores)) {
+        $c->add(HlJugadoresPeer::ID, $id_jugador);
+        $jugador = HlJugadoresPeer::doSelectOne($c);
+        if (!($jugador instanceof HlJugadores)) {
             $this->redirect($forward);
         }
 
@@ -572,10 +622,10 @@ class juegoActions extends sfActions {
 
         //Comprobar que el alias no está repetido
         $c = new Criteria();
-        $c->add(KillJugadoresPeer::ALIAS, $alias);
-        $c->add(KillJugadoresPeer::ID, $jugador->getId(), CRITERIA::NOT_EQUAL);
-        $otro_jugador = KillJugadoresPeer::doSelectOne($c);
-        if ($otro_jugador instanceof KillJugadores) {
+        $c->add(HlJugadoresPeer::ALIAS, $alias);
+        $c->add(HlJugadoresPeer::ID, $jugador->getId(), CRITERIA::NOT_EQUAL);
+        $otro_jugador = HlJugadoresPeer::doSelectOne($c);
+        if ($otro_jugador instanceof HlJugadores) {
             $this->getUser()->setFlash('notice', 'Ese alias ya existe.');
             $this->redirect($forward);
         }
@@ -605,9 +655,9 @@ class juegoActions extends sfActions {
             $this->redirect('visitas/index');
 
         $c = new Criteria();
-        $c->add(KillJugadoresPeer::ID, $id_jugador);
-        $jugador = KillJugadoresPeer::doSelectOne($c);
-        if (!($jugador instanceof KillJugadores)) {
+        $c->add(HlJugadoresPeer::ID, $id_jugador);
+        $jugador = HlJugadoresPeer::doSelectOne($c);
+        if (!($jugador instanceof HlJugadores)) {
             $this->redirect('visitas/index');
         }
 
@@ -620,9 +670,9 @@ class juegoActions extends sfActions {
             $this->redirect('visitas/index');
 
         $c = new Criteria();
-        $c->add(KillJugadoresPeer::ID, $id_jugador);
-        $jugador = KillJugadoresPeer::doSelectOne($c);
-        if (!($jugador instanceof KillJugadores)) {
+        $c->add(HlJugadoresPeer::ID, $id_jugador);
+        $jugador = HlJugadoresPeer::doSelectOne($c);
+        if (!($jugador instanceof HlJugadores)) {
             $this->redirect('visitas/index');
         }
 
@@ -643,7 +693,7 @@ class juegoActions extends sfActions {
         $ranking = array();
         while($tRegistro = $sentencia->fetch())
         {
-             $ranking[] = KillJugadoresPeer::retrieveByPK($tRegistro['id_jugador']);
+             $ranking[] = HlJugadoresPeer::retrieveByPK($tRegistro['id_jugador']);
         }
         $this->ranking = $ranking;
  
@@ -655,9 +705,9 @@ class juegoActions extends sfActions {
             $this->redirect('visitas/index');
 
         $c = new Criteria();
-        $c->add(KillJugadoresPeer::ID, $id_jugador);
-        $jugador = KillJugadoresPeer::doSelectOne($c);
-        if (!($jugador instanceof KillJugadores)) {
+        $c->add(HlJugadoresPeer::ID, $id_jugador);
+        $jugador = HlJugadoresPeer::doSelectOne($c);
+        if (!($jugador instanceof HlJugadores)) {
             $this->redirect('visitas/index');
         }
 
@@ -680,7 +730,7 @@ class juegoActions extends sfActions {
         $ranking6 = array();
         while($tRegistro = $sentencia->fetch())
         {
-             $ranking6[] = KillJugadoresPeer::retrieveByPK($tRegistro['id_jugador']);
+             $ranking6[] = HlJugadoresPeer::retrieveByPK($tRegistro['id_jugador']);
         }
         
         $sql = "SELECT kill_jugadores.id as id_jugador, count(*) as num_muertes 
@@ -697,7 +747,7 @@ class juegoActions extends sfActions {
         $ranking5 = array();
         while($tRegistro = $sentencia->fetch())
         {
-             $ranking5[] = KillJugadoresPeer::retrieveByPK($tRegistro['id_jugador']);
+             $ranking5[] = HlJugadoresPeer::retrieveByPK($tRegistro['id_jugador']);
         }
         
         $sql = "SELECT kill_jugadores.id as id_jugador, count(*) as num_muertes 
@@ -714,7 +764,7 @@ class juegoActions extends sfActions {
         $ranking4 = array();
         while($tRegistro = $sentencia->fetch())
         {
-             $ranking4[] = KillJugadoresPeer::retrieveByPK($tRegistro['id_jugador']);
+             $ranking4[] = HlJugadoresPeer::retrieveByPK($tRegistro['id_jugador']);
         }
         
         $sql = "SELECT kill_jugadores.id as id_jugador, count(*) as num_muertes 
@@ -731,7 +781,7 @@ class juegoActions extends sfActions {
         $ranking3 = array();
         while($tRegistro = $sentencia->fetch())
         {
-             $ranking3[] = KillJugadoresPeer::retrieveByPK($tRegistro['id_jugador']);
+             $ranking3[] = HlJugadoresPeer::retrieveByPK($tRegistro['id_jugador']);
         }
         
         $sql = "SELECT kill_jugadores.id as id_jugador, count(*) as num_muertes 
@@ -748,7 +798,7 @@ class juegoActions extends sfActions {
         $ranking2 = array();
         while($tRegistro = $sentencia->fetch())
         {
-             $ranking2[] = KillJugadoresPeer::retrieveByPK($tRegistro['id_jugador']);
+             $ranking2[] = HlJugadoresPeer::retrieveByPK($tRegistro['id_jugador']);
         }
         
         $sql = "SELECT kill_jugadores.id as id_jugador, count(*) as num_muertes 
@@ -764,7 +814,7 @@ class juegoActions extends sfActions {
 
         while($tRegistro = $sentencia->fetch())
         {
-             $ranking1[] = KillJugadoresPeer::retrieveByPK($tRegistro['id_jugador']);
+             $ranking1[] = HlJugadoresPeer::retrieveByPK($tRegistro['id_jugador']);
         }
         
         $this->ranking1 = $ranking1;

@@ -2,49 +2,60 @@ propel:
   _attributes:
     package: lib.model
     defaultIdMethod: native
-  kill_comentarios:
-    _attributes: { phpName: KillComentarios }
+  hl_comentarios:
+    _attributes: { phpName: HlComentarios }
     id: { phpName: Id, type: INTEGER, size: '11', primaryKey: true, autoIncrement: true, required: true }
-    id_jugador: { phpName: IdJugador, type: INTEGER, size: '11', required: false, foreignTable: kill_jugadores, foreignReference: id, onDelete: RESTRICT, onUpdate: CASCADE }
-    id_noticia: { phpName: IdNoticia, type: INTEGER, size: '11', required: true, foreignTable: kill_noticias, foreignReference: id, onDelete: RESTRICT, onUpdate: CASCADE }
+    id_jugador: { phpName: IdJugador, type: INTEGER, size: '11', required: false, foreignTable: hl_jugadores, foreignReference: id, onDelete: CASCADE, onUpdate: CASCADE }
+    id_noticia: { phpName: IdNoticia, type: INTEGER, size: '11', required: true, foreignTable: hl_noticias, foreignReference: id, onDelete: CASCADE, onUpdate: CASCADE }
     texto: { phpName: Texto, type: CLOB, required: true }
     fecha: { phpName: Fecha, type: TIMESTAMP, required: true }
-    _indexes: { id_jugador: [id_jugador], id_noticia: [id_noticia] }
-  kill_departamentos:
-    _attributes: { phpName: KillDepartamentos }
+    _indexes: { id_noticia: [id_noticia], id_jugador: [id_jugador] }
+  hl_departamentos:
+    _attributes: { phpName: HlDepartamentos }
     id: { phpName: Id, type: INTEGER, size: '11', primaryKey: true, autoIncrement: true, required: true }
     departamento: { phpName: Departamento, type: VARCHAR, size: '255', required: true }
-  kill_jugadores:
-    _attributes: { phpName: KillJugadores }
+  hl_estado:
+    _attributes: { phpName: HlEstado }
+    id: { phpName: Id, type: INTEGER, size: '11', primaryKey: true, autoIncrement: true, required: true }
+    ronda: { phpName: Ronda, type: INTEGER, size: '2', required: true }
+    fase: { phpName: Fase, type: VARCHAR, size: '10', required: true }
+    vidente: { phpName: Vidente, type: TINYINT, size: '1', required: true }
+  hl_jugadores:
+    _attributes: { phpName: HlJugadores }
     id: { phpName: Id, type: INTEGER, size: '11', primaryKey: true, autoIncrement: true, required: true }
     nombre: { phpName: Nombre, type: VARCHAR, size: '40', required: true }
-    id_departamento: { phpName: IdDepartamento, type: INTEGER, size: '11', required: true, foreignTable: kill_departamentos, foreignReference: id, onDelete: RESTRICT, onUpdate: CASCADE }
+    id_departamento: { phpName: IdDepartamento, type: INTEGER, size: '11', required: true, foreignTable: hl_departamentos, foreignReference: id, onDelete: CASCADE, onUpdate: CASCADE }
     alias: { phpName: Alias, type: VARCHAR, size: '40', required: true }
     foto: { phpName: Foto, type: VARCHAR, size: '255', required: true }
     usuario: { phpName: Usuario, type: VARCHAR, size: '128', required: true }
     contrasena: { phpName: Contrasena, type: VARCHAR, size: '128', required: true }
     email: { phpName: Email, type: VARCHAR, size: '40', required: true }
     descripcion: { phpName: Descripcion, type: CLOB, required: true }
-    id_victima: { phpName: IdVictima, type: INTEGER, size: '11', required: false, foreignTable: kill_jugadores, foreignReference: id, onDelete: RESTRICT, onUpdate: CASCADE }
+    id_victima: { phpName: IdVictima, type: INTEGER, size: '11', required: false }
     confirmacion_muerte: { phpName: ConfirmacionMuerte, type: TINYINT, size: '1', required: true, defaultValue: '0' }
     activo: { phpName: Activo, type: TINYINT, size: '1', required: true, defaultValue: '1' }
     _indexes: { id_departamento: [id_departamento], id_victima: [id_victima] }
-  kill_muertes:
-    _attributes: { phpName: KillMuertes }
+  hl_muertes:
+    _attributes: { phpName: HlMuertes }
     id: { phpName: Id, type: INTEGER, size: '11', autoIncrement: true, required: true }
-    id_asesino: { phpName: IdAsesino, type: INTEGER, size: '11', required: true, foreignTable: kill_jugadores, foreignReference: id, onDelete: RESTRICT, onUpdate: CASCADE }
-    id_victima: { phpName: IdVictima, type: INTEGER, size: '11', required: true, foreignTable: kill_jugadores, foreignReference: id, onDelete: RESTRICT, onUpdate: CASCADE }
+    id_asesino: { phpName: IdAsesino, type: INTEGER, size: '11', required: true }
+    id_victima: { phpName: IdVictima, type: INTEGER, size: '11', required: true }
     fecha_muerte: { phpName: FechaMuerte, type: TIMESTAMP, required: true }
     arma: { phpName: Arma, type: VARCHAR, size: '50', required: true }
     lugar: { phpName: Lugar, type: VARCHAR, size: '100', required: true }
-    _indexes: { id_asesino: [id_asesino], id_victima: [id_victima] }
     _uniques: { id: [id] }
-  kill_noticias:
-    _attributes: { phpName: KillNoticias }
+  hl_noticias:
+    _attributes: { phpName: HlNoticias }
     id: { phpName: Id, type: INTEGER, size: '11', primaryKey: true, autoIncrement: true, required: true }
-    id_jugador: { phpName: IdJugador, type: INTEGER, size: '11', required: false, foreignTable: kill_jugadores, foreignReference: id, onDelete: RESTRICT, onUpdate: CASCADE }
+    id_jugador: { phpName: IdJugador, type: INTEGER, size: '11', required: false }
     fecha: { phpName: Fecha, type: TIMESTAMP, required: true }
     titulo: { phpName: Titulo, type: VARCHAR, size: '255', required: true }
     noticia: { phpName: Noticia, type: CLOB, required: true }
     foto_noticia: { phpName: FotoNoticia, type: VARCHAR, size: '255', required: true }
     _indexes: { id_jugador: [id_jugador] }
+  hl_votos:
+    _attributes: { phpName: HlVotos }
+    id: { phpName: Id, type: INTEGER, size: '11', primaryKey: true, autoIncrement: true, required: true }
+    id_jugador: { phpName: IdJugador, type: INTEGER, size: '11', required: true, foreignTable: hl_jugadores, foreignReference: id, onDelete: CASCADE, onUpdate: CASCADE }
+    id_victima: { phpName: IdVictima, type: INTEGER, size: '11', required: true, foreignTable: hl_jugadores, foreignReference: id, onDelete: CASCADE, onUpdate: CASCADE }
+    _indexes: { id_jugador: [id_jugador], id_victima: [id_victima] }

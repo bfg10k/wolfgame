@@ -18,10 +18,10 @@
         <p><?php echo $noticia->getNoticia(); ?></p>
         <div>
             <span class="badge badge-success">Publicado el <?php echo $noticia->getFecha('d-m-Y H:i'); ?></span>
-            <span class="badge badge-success badge-comentarios"><?php echo $noticia->countKillComentarioss(); ?> comentarios</span>
+            <span class="badge badge-success badge-comentarios"><?php echo $noticia->countHlComentarioss(); ?> comentarios</span>
         </div> 
         <div id="div_comentarios" class="span4" style="float:right; text-align: right; display: none;">
-          <?php foreach($noticia->getKillComentarioss() as $comentario): ?>
+          <?php foreach($noticia->getHlComentarioss() as $comentario): ?>
               <?php echo $comentario->getTexto(); ?>
               <hr/>
           <?php endforeach ?>

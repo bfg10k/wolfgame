@@ -20,9 +20,8 @@
                         <input type="password" name="password" class="input-small" placeholder="Password">
                         
                         <button type="submit" class="btn btn-success">Login</button>
-                        <?php if(time() < strtotime('7 November 2012')): ?>
-                          <a href="<?php echo url_for('visitas/registro'); ?>" class="btn btn-info">Registro</a>
-                        <?php endif ?>
+                        <a href="<?php echo url_for('visitas/registro'); ?>" class="btn btn-info">Registro</a>
+                        
                     </fieldset>
                 </form>
             </div>

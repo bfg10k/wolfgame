@@ -17,7 +17,9 @@ class visitasActions extends sfActions
   */
   public function executeIndex(sfWebRequest $request)
   {
-    $this->jugadores = KillJugadoresPeer::doSelect(new Criteria());
+    $c = new Criteria();
+    $c->addAscendingOrderByColumn(HlJugadoresPeer::NOMBRE);
+    $this->jugadores = HlJugadoresPeer::doSelect($c);
   }
   
   public function executeFichaAjax(sfWebRequest $request)
@@ -28,20 +30,16 @@ class visitasActions extends sfActions
   
   public function executeRegistro(sfWebRequest $request)
   {
-      if(time() >= strtotime('7 November 2012'))
-        $this->redirect('visitas/index');
-
+      
       $criteria = new Criteria();
-      $this->departamentos = KillDepartamentosPeer::doSelect($criteria);
+      $this->departamentos = HlDepartamentosPeer::doSelect($criteria);
       
       $this->aviso = $this->getUser()->getFlash('notice');
   }
 
   public function executeRegistrado(sfWebRequest $request)
   {
-    if(time() >= strtotime('7 November 2012'))
-        $this->redirect('visitas/index');
-
+    
     $nombre = $request->getParameter('nombre');
     if(empty($nombre)) 
     {
@@ -56,19 +54,7 @@ class visitasActions extends sfActions
         $this->redirect('visitas/registro');
     }
     
-    $alias = $request->getParameter('alias');
-    if(empty($alias)) 
-    {
-        $this->getUser()->setFlash('notice','El alias es obligatorio');
-        $this->redirect('visitas/registro');
-    }
     
-    $biografia = $request->getParameter('biografia');
-    if(empty($biografia)) 
-    {
-        $this->getUser()->setFlash('notice','La biografía es obligatoria');
-        $this->redirect('visitas/registro');
-    }
     
     $usuario = $request->getParameter('usuario');
     if(empty($usuario)) 
@@ -104,73 +90,24 @@ class visitasActions extends sfActions
     }
     
     
-    $fileName = $request->getFiles('foto');
-    //print_r($fileName);exit;
-
-    $fileSize = $fileName['size'];
-    if($fileSize <= 0)
-    {
-        $this->getUser()->setFlash('notice','La foto es obligatoria');
-        $this->redirect('visitas/registro');
-    }
-    
-    switch($fileName['type'])
-    {
-      case 'image/jpeg':
-        $ext = 'jpg';
-        break;
-      case 'image/png':
-        $ext = 'png';
-        break;
-      case 'image/gif':
-        $ext = 'gif';
-        break;
-      default: 
-        $this->getUser()->setFlash('notice','La foto debe tener extensión jpg, gif o png');
-        $this->redirect('visitas/registro');
-        break;
-    }
-    
-    if($fileSize > 100000)
-    {
-        $this->getUser()->setFlash('notice','La foto no puede superar los 100 KB');
-        $this->redirect('visitas/registro');
-    }
-    
-    $fileType = $fileName['type'];
-    $theFileName = $fileName['name'];
-    $uploadDir = sfConfig::get("sf_web_dir");
-    $fotosDir = $uploadDir.'/images/fotos';
-
-    if(!is_dir($fotosDir))
-        mkdir($fotosDir, 0777);            
+            
 
     //Comprobar que el usuario no está repetido
     $c = new Criteria();
-    $c->add(KillJugadoresPeer::USUARIO,$usuario);
-    $jugador = KillJugadoresPeer::doSelectOne($c);
-    if($jugador instanceof KillJugadores)
+    $c->add(HlJugadoresPeer::USUARIO,$usuario);
+    $jugador = HlJugadoresPeer::doSelectOne($c);
+    if($jugador instanceof HlJugadores)
     {
         $this->getUser()->setFlash('notice','Ese nombre de usuario ya existe.');
         $this->redirect('visitas/registro');
     }
 
-    //Comprobar que el alias no está repetido
-    $c = new Criteria();
-    $c->add(KillJugadoresPeer::ALIAS,$alias);
-    $jugador = KillJugadoresPeer::doSelectOne($c);
-    if($jugador instanceof KillJugadores)
-    {
-        $this->getUser()->setFlash('notice','Ese alias ya existe.');
-        $this->redirect('visitas/registro');
-    }
+    
 
-
-    $jugador_nuevo = new KillJugadores();
+    $jugador_nuevo = new HlJugadores();
     $jugador_nuevo->setNombre($nombre);
     $jugador_nuevo->setIdDepartamento($departamento);
-    $jugador_nuevo->setAlias($alias);
-    $jugador_nuevo->setDescripcion($biografia);
+    
     $jugador_nuevo->setUsuario($usuario);
     $jugador_nuevo->setContrasena(md5($contrasena));
     $jugador_nuevo->setEmail($email);
@@ -178,18 +115,16 @@ class visitasActions extends sfActions
     $jugador_nuevo->setActivo(1);    
     $jugador_nuevo->save();
     
-    $idjugador = $jugador_nuevo->getId();
     
-    move_uploaded_file($fileName['tmp_name'], "$fotosDir/foto$idjugador.$ext");
-    $jugador_nuevo->setFoto("foto$idjugador.$ext");
-    $jugador_nuevo->save();
+    
+    
   }
 
   public function executeBlog(sfWebRequest $request)
   {
     $criteria = new Criteria();
-    $criteria->addDescendingOrderByColumn(KillNoticiasPeer::ID);
-    $this->noticias = KillNoticiasPeer::doSelect($criteria);
+    $criteria->addDescendingOrderByColumn(HlNoticiasPeer::ID);
+    $this->noticias = HlNoticiasPeer::doSelect($criteria);
   }
   
   public function executeComentar(sfWebRequest $request)
@@ -229,9 +164,9 @@ class visitasActions extends sfActions
     }
 
     $c = new Criteria();
-    $c->add(KillJugadoresPeer::USUARIO,$usuario);
-    $jugador = KillJugadoresPeer::doSelectOne($c);
-    if(!($jugador instanceof KillJugadores))
+    $c->add(HlJugadoresPeer::USUARIO,$usuario);
+    $jugador = HlJugadoresPeer::doSelectOne($c);
+    if(!($jugador instanceof HlJugadores))
     {
       $this->redirect('visitas/index');
     }

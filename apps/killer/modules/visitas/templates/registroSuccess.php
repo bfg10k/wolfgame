@@ -40,30 +40,6 @@
             <p class="help-block">Tu departamento para que puedan identificarte junto con el nombre</p>
           </div>
 
-        </div><div class="control-group">
-
-          <!-- Text input-->
-          <label class="control-label" for="input01">Alias</label>
-          <div class="controls">
-            <input type="text" name="alias" placeholder="alias" class="input-xlarge">
-            <p class="help-block">Un alias mafioso/divertido para que nadie pueda identificarte</p>
-          </div>
-        </div><div class="control-group">
-
-          <!-- Text input-->
-          <label class="control-label" for="input01">Biografía</label>
-          <div class="controls">
-            <textarea name="biografia" rows="8" class="input-xlarge" placeholder="escribe tu biografía" ></textarea>
-            <p class="help-block">Escribe una breve biografía para que salga en tu ficha de asesino</p>
-          </div>
-        </div><div class="control-group">
-          <label class="control-label">Sube una foto (max. 100k)</label>
-
-          <!-- File Upload -->
-          <div class="controls">
-            <input name="foto" class="input-file" id="fileInput" type="file">
-            <p class="help-block">La redimensionaremos a 70 x 70 píxeles.</p>
-          </div>
         </div>
 
     <div class="control-group">
