@@ -149,6 +149,11 @@ class visitasActions extends sfActions
 
   }
   
+  public function executeHistoria(sfWebRequest $request)
+  {
+
+  }
+  
   public function executeLogin(sfWebRequest $request)
   {
     $usuario = $request->getParameter('username',null);
