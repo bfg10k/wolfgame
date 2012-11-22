@@ -37,7 +37,12 @@ class juegoActions extends sfActions {
         $this->jugador = $jugador;
         $this->nombre = $jugador->getNombre();
         
-        $fase="dia";
+        $c = new Criteria();
+        $c->add(HlJugadoresPeer::ACTIVO,1);
+        $this->selectJugadoresVivos = new sfWidgetFormPropelChoice(array('model'=>'HlJugadores','criteria'=>$c));
+
+        $estado = HlEstadoPeer::retrieveByPK(1);
+        $fase = $estado->getFase();
         switch($fase)
         {
           case "noche":
@@ -46,28 +51,30 @@ class juegoActions extends sfActions {
           case "dia":
             $this->votos = HlVotosPeer::doSelect(new Criteria());
             $this->setTemplate("dia");
+            break;
+          default:
+            $this->setTemplate("noche");
+            break;
+            
         }
         
         $rol="lobo";
         switch ($rol) {
           case "lobo":
-            $c = new Criteria();
-            $c->add(HlJugadoresPeer::ACTIVO,1);
-            $this->selectJugadoresVivos = new sfWidgetFormPropelChoice(array('model'=>'HlJugadores','criteria'=>$c));
             return "Lobo";
             break;
           
-          case "alcalde":
-            return "Alcalde";
-            break;
-          
-          case "vidente":
-            return "Vidente";
-            break;
-          
-          case "enamorado":
-            return "Enamorado";
-            break;  
+//          case "alcalde":
+//            return "Alcalde";
+//            break;
+//          
+//          case "vidente":
+//            return "Vidente";
+//            break;
+//          
+//          case "enamorado":
+//            return "Enamorado";
+//            break;  
           
           default:
             return "Pueblerino";
@@ -75,6 +82,87 @@ class juegoActions extends sfActions {
         }
           
         
+    }
+    
+    public function executeObjetivo(sfWebRequest $request) {
+        $id_jugador = $this->getUser()->getAttribute('user_id', null);
+        if (is_null($id_jugador))
+            $this->redirect('visitas/index');
+
+        $c = new Criteria();
+        $c->add(HlJugadoresPeer::ID, $id_jugador);
+        $jugador = HlJugadoresPeer::doSelectOne($c);
+        if (!($jugador instanceof HlJugadores)) {
+            $this->redirect('visitas/index');
+        }
+
+        if ($jugador->getActivo() === 0) {
+            $this->setTemplate('indexMuerto');
+            $this->jugador = $jugador;
+            $this->nombre = $jugador->getNombre();
+            return "Success";
+        }
+        
+        $this->jugador = $jugador;
+        $this->nombre = $jugador->getNombre();
+        
+        $c = new Criteria();
+        $c->add(HlJugadoresPeer::ACTIVO,1);
+        $this->selectJugadoresVivos = new sfWidgetFormPropelChoice(array('model'=>'HlJugadores','criteria'=>$c));
+
+               
+        
+        $rol="lobo";
+        switch ($rol) {
+          case "lobo":
+            return "Lobo";
+            break;
+          
+//          case "alcalde":
+//            return "Alcalde";
+//            break;
+//          
+//          case "vidente":
+//            return "Vidente";
+//            break;
+//          
+//          case "enamorado":
+//            return "Enamorado";
+//            break;  
+          
+          default:
+            return "Pueblerino";
+            break;
+        }
+          
+        
+    }
+    
+    public function executeMatarHL(sfWebRequest $request)
+    {
+      $id_jugador = $this->getUser()->getAttribute('user_id', null);
+        if (is_null($id_jugador))
+            $this->redirect('visitas/index');
+
+        $c = new Criteria();
+        $c->add(HlJugadoresPeer::ID, $id_jugador);
+        $jugador = HlJugadoresPeer::doSelectOne($c);
+        if (!($jugador instanceof HlJugadores)) {
+            $this->redirect('visitas/index');
+        }
+        
+        $id_victima = $request->getParameter('id_victima');
+        $victima = HlJugadoresPeer::retrieveByPK($id_victima);
+        if($victima instanceof HlJugadores)
+        {
+          $victima->setActivo(0);
+          $victima->save();
+          $estado = HlEstadoPeer::retrieveByPK(1);
+          $estado->setFase('dia');
+          $estado->save();
+        }
+        
+        $this->redirect('juego/index');
     }
     
     public function executeVotar(sfWebRequest $request)
@@ -101,6 +189,50 @@ class juegoActions extends sfActions {
         }
         $voto->setIdVictima($id_victima);
         $voto->save();
+        
+        $this->redirect('juego/index');
+    }
+    
+    public function executeMatarPueblo(sfWebRequest $request)
+    {
+        $id_jugador = $this->getUser()->getAttribute('user_id', null);
+        if (is_null($id_jugador))
+            $this->redirect('visitas/index');
+
+        $c = new Criteria();
+        $c->add(HlJugadoresPeer::ID, $id_jugador);
+        $jugador = HlJugadoresPeer::doSelectOne($c);
+        if (!($jugador instanceof HlJugadores)) {
+            $this->redirect('visitas/index');
+        }
+        
+        $conexion = Propel::getConnection();
+
+        $sql = "SELECT hl_votos.id_victima as id_victima, count(*) as num_votos 
+                FROM hl_votos 
+                GROUP BY id_victima
+                ORDER BY num_votos desc
+                LIMIT 1
+               ;";
+
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->execute();
+
+        $tRegistro = $sentencia->fetch();
+        $id_victima = $tRegistro['id_victima'];
+     
+        
+        
+        $victima = HlJugadoresPeer::retrieveByPK($id_victima);
+        if($victima instanceof HlJugadores)
+        {
+          $victima->setActivo(0);
+          $victima->save();
+          HlVotosPeer::doDeleteAll();
+          $estado = HlEstadoPeer::retrieveByPK(1);
+          $estado->setFase('noche');
+          $estado->save();
+        }
         
         $this->redirect('juego/index');
     }
