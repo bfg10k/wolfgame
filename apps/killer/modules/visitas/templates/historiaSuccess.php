@@ -62,5 +62,10 @@
     <p>
       La tensión, crispación y desesperación han regresado.
     </p>
+    
+    
+    <p>Nota del autor: Lo de "eliminado" es un eufemismo: quiere decir torturado y/o degollado y/o decapitado y/o electrocutado y/o fusilado hasta el extremo.
+      Y lo de "despedido" es otro eufemismo: quiere decir linchado y sacrificado por sus propios compañeros.
+    </p>
 
 </div>
