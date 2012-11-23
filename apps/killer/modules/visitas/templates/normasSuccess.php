@@ -37,17 +37,22 @@
 
 
     <h2>Roles</h2>
-    <p><strong>Psicópata <span style="text-decoration:line-through;">asesino<span></strong>: Nadie sabe quien es. Debe mantener su rol en secreto. Elimina a un jugador cada noche. Participa en los debates y votaciones como uno más.</p>
+    <p><strong>Licántrop@:</strong> Nadie sabe quien es. Debe mantener su rol en secreto. Mata a un jugador cada noche. Participa en los debates y votaciones como uno más. En esta edición habrá 2 licántropos.</p>
 
-    <p><strong>Director</strong>: Todo el mundo sabe quien es. Participa en los debates y votaciones como uno más. Se encarga de cerrar cada día las votaciones. En caso de empate, decide a quien hay que eliminar. Si es eliminado se nombra a otro jugador en su puesto. El psicópata podría ser también director.</p>
+    <p><strong>Alcalde/sa:</strong> Todo el mundo sabe quien es. Participa en los debates y votaciones como uno más. Se encarga de cerrar cada día las votaciones. En caso de empate, decide a quien hay que eliminar. Si es eliminado se nombra a otro jugador en su puesto. El Alcalde puede ser también un licántrop@.</p>
 
-    <p><strong>Psicólogo</strong>: Nadie sabe quien es. Tiene la habilidad de cada día conocer el rol de uno de los jugadores. Debe mantener su rol en secreto. Participa en los debates y votaciones como uno más. El psicópata no puede tener el rol de psicólogo.</p>
+    <p><strong>Vidente:</strong> Nadie sabe quien es. Tiene la habilidad de cada día conocer el rol de uno de los jugadores. Debe mantener su rol en secreto. Participa en los debates y votaciones como uno más. Los licántrop@s no pueden tener el rol de vidente.</p>
 
-    <p><strong>Enamorados</strong>: Habrá una pareja de enamorados. Se conocen entre ellos pero mantienen su amor en secreto. Participan en los debates y votaciones como los demás. Si uno de los dos enamorados es eliminado, el otro será eliminado también automáticamente. El psicópata podría ser uno de los enamorados.</p>
+    <p><strong>Enamorad@s</strong>: Habrá una pareja de enamorad@s. Se conocen entre ellos pero mantienen su amor en secreto. Participan en los debates y votaciones como los demás. Si uno de los dos enamorad@s muere, el otro morirá también de pena  automáticamente. Un licántrop@ también podría ser uno de los enamorad@s.</p>
 
-    
+ <p><strong>Bruj@:</strong> Nadie sabe quien es. Participa en los debates y votaciones como uno más. Dispone de dos pociones; una para revivir a un jugador muerto y otra para matar a uno de los jugadores. El bruj@ no puede ser licántrop@.</p>
+
+    <p><strong>Put@:</strong> Nadie sabe quien es. Participa en los debates y votaciones como uno más. Cada noche puede resucitar a uno de los muertos, si quiere. El Put@ no puede ser licántrop@.</p>
+
+<p><strong>Cazador/a:</strong> Nadie sabe quien es. Participa en los debates y votaciones como uno más. Cuando el cazador/a muere, puede disparar con su escopeta a un jugador a su elección y matarlo. El Cazador/a no puede ser licántrop@.</p>
 
 
+<p><strong>Enferm@:</strong> Nadie sabe quien es. Participa en los debates y votaciones como uno más. Si un licántrop@ le mata, el licántropo estará un turno sin poder matar. El enferm@ no puede ser licántrop@.</p>
 
 
 
