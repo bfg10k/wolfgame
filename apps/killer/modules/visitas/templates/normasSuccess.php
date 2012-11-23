@@ -34,6 +34,22 @@
     <p>Si el jugador eliminado NO era el psicópata, se vuelve al punto 1)</p>
     <p>El psicópata gana si el resto de jugadores son eliminados.</p>
     
+
+
+    <h2>Roles</h2>
+    <p><strong>Psicópata <span style="text-decoration:line-through;">asesino<span></strong>: Nadie sabe quien es. Debe mantener su rol en secreto. Elimina a un jugador cada noche. Participa en los debates y votaciones como uno más.</p>
+
+    <p><strong>Director</strong>: Todo el mundo sabe quien es. Participa en los debates y votaciones como uno más. Se encarga de cerrar cada día las votaciones. En caso de empate, decide a quien hay que eliminar. Si es eliminado se nombra a otro jugador en su puesto. El psicópata podría ser también director.</p>
+
+    <p><strong>Psicólogo</strong>: Nadie sabe quien es. Tiene la habilidad de cada día conocer el rol de uno de los jugadores. Debe mantener su rol en secreto. Participa en los debates y votaciones como uno más. El psicópata no puede tener el rol de psicólogo.</p>
+
+    <p><strong>Enamorados</strong>: Habrá una pareja de enamorados. Se conocen entre ellos pero mantienen su amor en secreto. Participan en los debates y votaciones como los demás. Si uno de los dos enamorados es eliminado, el otro será eliminado también automáticamente. El psicópata podría ser uno de los enamorados.</p>
+
     
+
+
+
+
+
 
 </div>
