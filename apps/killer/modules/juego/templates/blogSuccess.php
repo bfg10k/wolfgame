@@ -5,8 +5,6 @@
     <ul class="dropdown-menu">
     <li><a href="<?php echo url_for('juego/editar'); ?>"><i class="icon-pencil"></i> Editar perfil</a></li>
     <li><a href="<?php echo url_for('juego/salir'); ?>"><i class="icon-ban-circle"></i> Salir</a></li>
-    <li class="divider"></li>
-    <li><a href="<?php echo url_for('juego/rellenarInforme'); ?>"><i class="i"></i> Certifica la muerte de tu objetivo</a></li>
     </ul>
     </div>
 
@@ -16,14 +14,14 @@
 <div id="nav-user">
     <ul class="nav nav-list">
     <li><a href="<?php echo url_for('juego/index'); ?>"><i class="icon-home"></i> Inicio</a></li>
-    <li><a href="<?php echo url_for('juego/rueda'); ?>"><i class="icon-screenshot"></i> Rueda de objetivos</a></li>
-    <li class="active"><a href="<?php echo url_for('juego/blog'); ?>"><i class="icon-eye-open"></i> Killer News</a></li>
+    <li><a href="<?php echo url_for('juego/objetivo'); ?>"><i class="icon-screenshot"></i> Tu Rol</a></li>
+    <li class="active"><a href="<?php echo url_for('juego/blog'); ?>"><i class="icon-eye-open"></i> INTEF News</a></li>
     </ul>
 </div>
 
 <div id="content-user">
   
-<h1>Killer News</h1>
+<h1>INTEF News</h1>
 
     <?php foreach($sf_data->getRaw('noticias') as $noticia): ?>
     <div class="span8">
@@ -32,10 +30,10 @@
         <p><?php echo $noticia->getNoticia(); ?></p>
         <div>
             <span class="badge badge-success">Publicado <?php echo $noticia->getFecha('d-m-Y H:i'); ?></span>
-            <span class="badge badge-success badge-comentarios"><?php echo $noticia->countKillComentarioss(); ?> comentarios</span>
+            <span class="badge badge-success badge-comentarios"><?php echo $noticia->countHlComentarioss(); ?> comentarios</span>
         </div> 
         <div id="div_comentarios" class="span4" style="float:right; text-align: right; display: none;">
-          <?php foreach($noticia->getKillComentarioss() as $comentario): ?>
+          <?php foreach($noticia->getHlComentarioss() as $comentario): ?>
               <?php echo $comentario->getTexto(); ?>
               <hr/>
           <?php endforeach ?>

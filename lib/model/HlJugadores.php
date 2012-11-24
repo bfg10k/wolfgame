@@ -89,6 +89,32 @@ class HlJugadores extends BaseHlJugadores {
     return $this->getEnfermo() > 0;
   }
   
+  public function muere()
+  {
+    $this->setActivo(0);
+    $this->save();
+    Juego::registraEvento($this->getNombre().' muere.');
+      
+    if($this->estaEnamorado()) 
+    {
+      Juego::registraEvento($this->getNombre().' era: Enamorado.');
+      $amante = $this->getAmante();
+      if($amante->getActivo()==1)
+      {
+        $amante->muere();
+        Juego::registraEvento($amante->getNombre().' estaba enamorado de '.$this->getNombre(). ' y ha muerto de pena.');
+      }
+    } 
+    if($this->esAlcalde()) 
+    {
+      Juego::registraEvento($this->getNombre().' era: Acalde.');
+      $this->setAlcalde(0);
+      Juego::sortearAlcalde();
+      $this->save();
+    } 
+  }
+  
+  
   
  
         

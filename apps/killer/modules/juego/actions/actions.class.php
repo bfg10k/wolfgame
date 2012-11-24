@@ -159,7 +159,8 @@ class juegoActions extends sfActions {
         $victima = HlJugadoresPeer::retrieveByPK($id_victima);
         if($victima instanceof HlJugadores)
         {
-          $victima->setActivo(0);
+          Juego::registraEvento('Un hombre lobo ha matado.');
+          $victima->muere();
           $victima->save();
           $estado = HlEstadoPeer::retrieveByPK(1);
           $estado->setFase('dia');
@@ -194,6 +195,8 @@ class juegoActions extends sfActions {
         $voto->setIdVictima($id_victima);
         $voto->save();
         
+        Juego::registraEvento($jugador->getNombre().' ha votado.');
+        
         $this->redirect('juego/index');
     }
     
@@ -210,6 +213,7 @@ class juegoActions extends sfActions {
             $this->redirect('visitas/index');
         }
         
+               
         $conexion = Propel::getConnection();
 
         $sql = "SELECT hl_votos.id_victima as id_victima, count(*) as num_votos 
@@ -245,6 +249,7 @@ class juegoActions extends sfActions {
         elseif($num_victimas > 1)
         {
           //Hay empate
+          Juego::registraEvento('Se cierran las votaciones. Ha habido empate.');
           $estado = HlEstadoPeer::retrieveByPK(1);
           $estado->setFase('desempate');
           $estado->save();
@@ -252,13 +257,14 @@ class juegoActions extends sfActions {
         }
         elseif($num_victimas == 1)
         {
+          Juego::registraEvento('Se cierran las votaciones.');
           $tRegistro = $sentencia->fetch();
           $id_victima = $tRegistro['id_victima'];
 
           $victima = HlJugadoresPeer::retrieveByPK($id_victima);
           if($victima instanceof HlJugadores)
           {
-            $victima->setActivo(0);
+            $victima->muere();
             $victima->save();
             HlVotosPeer::doDeleteAll();
             $estado = HlEstadoPeer::retrieveByPK(1);
@@ -292,11 +298,12 @@ class juegoActions extends sfActions {
         }
         
       /** @todo Comprobar que tiene el rol de alcalde */
+        Juego::registraEvento('El Alcalde ya ha elegido quién debe morir.');
         $id_victima = $request->getParameter('id_victima');
         $victima = HlJugadoresPeer::retrieveByPK($id_victima);
         if($victima instanceof HlJugadores)
         {
-          $victima->setActivo(0);
+          $victima->muere();
           $victima->save();
           HlVotosPeer::doDeleteAll();
           $estado = HlEstadoPeer::retrieveByPK(1);
