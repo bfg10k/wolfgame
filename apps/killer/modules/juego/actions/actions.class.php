@@ -47,13 +47,19 @@ class juegoActions extends sfActions {
         {
           case "noche":
             $this->setTemplate("noche");
+            if($jugador->esHombrelobo()) return "Lobo";
+            else return "Generico";
             break;
           case "dia":
             $this->votos = HlVotosPeer::doSelect(new Criteria());
             $this->setTemplate("dia");
             break;
+          case "desempate":
+            $this->setTemplate("desempate");
+            if($jugador->esAlcalde()) return "Alcalde";
+            else return "Generico";
           default:
-            $this->setTemplate("noche");
+            return "Error"; //No ha sido posible definir la fase
             break;
             
         }
