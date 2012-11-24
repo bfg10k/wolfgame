@@ -28,6 +28,13 @@
   
   Función: Cada vez que llega la noche, te transformas en lobo y matas a un habitante del pueblo.
   
+  <?php if($jugador->esAlcalde()):?>
+  <div>
+    <dt>Rol</dt><dd>Alcalde</dd>
+    <div>Eres el encargado de cerrar las votaciones y de decidir en caso de empate.</div> 
+    </div>
+  <?php endif ?>
+  
 </div>
 
   

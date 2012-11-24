@@ -28,6 +28,13 @@
   La elección de la persona sacrificada será mediante el sistema de votaciones.
   </div>
   
+  <?php if($jugador->esAlcalde()):?>
+  <div>
+    <dt>Rol</dt><dd>Alcalde</dd>
+    <div>Eres el encargado de cerrar las votaciones y de decidir en caso de empate.</div> 
+    </div>
+  <?php endif ?>
+  
   <?php if($jugador->esVidente()):?>
   <div>
     <dt>Rol</dt><dd>Vidente</dd>
