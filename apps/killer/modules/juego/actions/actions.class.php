@@ -59,6 +59,40 @@ class juegoActions extends sfActions {
             else return "Generico";
             break;
           case "desempate":
+            $conexion = Propel::getConnection();
+
+            $sql = "SELECT hl_votos.id_victima as id_victima, count(*) as num_votos 
+                    FROM hl_votos 
+                    GROUP BY id_victima
+                    ORDER BY num_votos desc
+                    LIMIT 1
+                   ;";
+
+            $sentencia = $conexion->prepare($sql);
+            $sentencia->execute();
+
+            $tRegistro = $sentencia->fetch();
+            $max_num_votos = $tRegistro['num_votos'];
+
+            $sql = "SELECT hl_votos.id_victima as id_victima, count(*) as num_votos
+                    FROM hl_votos 
+                    GROUP BY id_victima
+                    having num_votos = $max_num_votos
+                    ORDER BY num_votos desc
+                   ;";
+
+            $sentencia = $conexion->prepare($sql);
+            $sentencia->execute();
+
+            $num_victimas = $sentencia->rowCount();
+            
+            $victimas = array();
+            while($tRegistro = $sentencia->fetch())
+            {
+              $victimas[] = HlJugadoresPeer::retrieveByPK($tRegistro['id_victima']);
+            }
+            
+            $this->victimas = $victimas;
             $this->setTemplate("desempate");
             if($jugador->esAlcalde()) return "Alcalde";
             else return "Generico";
@@ -163,7 +197,7 @@ class juegoActions extends sfActions {
         $this->redirect('juego/index');
     }
     
-    public function executeMatarPueblo(sfWebRequest $request)
+    public function executeCerrarVotacion(sfWebRequest $request)
     {
         $id_jugador = $this->getUser()->getAttribute('user_id', null);
         if (is_null($id_jugador))
@@ -187,12 +221,78 @@ class juegoActions extends sfActions {
 
         $sentencia = $conexion->prepare($sql);
         $sentencia->execute();
-
+                
         $tRegistro = $sentencia->fetch();
-        $id_victima = $tRegistro['id_victima'];
+        $max_num_votos = $tRegistro['num_votos'];
      
+        $sql = "SELECT hl_votos.id_victima as id_victima, count(*) as num_votos
+                FROM hl_votos 
+                GROUP BY id_victima
+                having num_votos = $max_num_votos
+                ORDER BY num_votos desc
+               ;";
         
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->execute();
+                
+        $num_victimas = $sentencia->rowCount(); //rowcount no en todas las bbdd funciona con selects
+
+        if($num_victimas < 1)
+        {
+          //No debería entrar aquí 
+          $this->redirect('juego/index');
+        }
+        elseif($num_victimas > 1)
+        {
+          //Hay empate
+          $estado = HlEstadoPeer::retrieveByPK(1);
+          $estado->setFase('desempate');
+          $estado->save();
+          $this->redirect('juego/index');
+        }
+        elseif($num_victimas == 1)
+        {
+          $tRegistro = $sentencia->fetch();
+          $id_victima = $tRegistro['id_victima'];
+
+          $victima = HlJugadoresPeer::retrieveByPK($id_victima);
+          if($victima instanceof HlJugadores)
+          {
+            $victima->setActivo(0);
+            $victima->save();
+            HlVotosPeer::doDeleteAll();
+            $estado = HlEstadoPeer::retrieveByPK(1);
+            $estado->setRonda($estado->getRonda()+1);
+            $estado->setFase('noche');
+            $estado->setVidente(0);
+            $estado->save();
+          }
+          $this->redirect('juego/index');
+        }
+        else
+        {
+          //Error inesperado
+          $this->redirect('juego/index');
+        }
+
+        $this->redirect('juego/index');
+    }
+    
+    public function executeDesempatar(sfWebRequest $request)
+    {
+        $id_jugador = $this->getUser()->getAttribute('user_id', null);
+        if (is_null($id_jugador))
+            $this->redirect('visitas/index');
+
+        $c = new Criteria();
+        $c->add(HlJugadoresPeer::ID, $id_jugador);
+        $jugador = HlJugadoresPeer::doSelectOne($c);
+        if (!($jugador instanceof HlJugadores)) {
+            $this->redirect('visitas/index');
+        }
         
+      /** @todo Comprobar que tiene el rol de alcalde */
+        $id_victima = $request->getParameter('id_victima');
         $victima = HlJugadoresPeer::retrieveByPK($id_victima);
         if($victima instanceof HlJugadores)
         {
@@ -205,8 +305,8 @@ class juegoActions extends sfActions {
           $estado->setVidente(0);
           $estado->save();
         }
-        
         $this->redirect('juego/index');
+        /** @todo escribir muerte en el blog */
     }
     
     public function executeVidencia(sfWebRequest $request)

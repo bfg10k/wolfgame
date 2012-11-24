@@ -19,27 +19,17 @@
 </div>
   
 
-<div id="content-objetivo" class="rounded-corners">
-  <form method="post" action="<?php echo url_for('juego/votar');?>">
-    <label>Elige a la persona que creas que es el licántropo: </label>
-    <?php echo $sf_data->getRaw('selectJugadoresVivos')->render('id_victima'); ?>     
-    <button type="submit" class="btn btn-primary">Votar</button>
-  </form>
-  Puedes cambiar de voto todas las veces que quieras mientras esté abierto el periodo de votación.
-  <div>
-    <h3>Votaciones</h3>
-    <div>
-      <?php foreach($votos as $voto): ?>
-      <div>
-        <span><?php echo $voto->getHlJugadoresRelatedByIdJugador();?></span>
-        <span> vota a </span>
-        <span><?php echo $voto->getHlJugadoresRelatedByIdVictima();?></span>
-      </div>
-      <?php endforeach; ?>
-    </div>
-    <a class="btn btn-primary" href="<?php echo url_for('juego/cerrarVotacion'); ?>">Cerrar la votación</a>
-  </div>
-</div>
 
+<div id="content-objetivo" class="rounded-corners">
+  Hay un empate entre: 
+  
+  <ul>
+  <?php foreach($victimas as $victima): ?>
+    <li><?php echo $victima ?></li>  
+  <?php endforeach ?>
+  </ul>
+  
+  El alcalde está resolviendo la votación.
+</div>
   
   
