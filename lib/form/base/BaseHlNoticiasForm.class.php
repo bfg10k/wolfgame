@@ -15,7 +15,7 @@ abstract class BaseHlNoticiasForm extends BaseFormPropel
   {
     $this->setWidgets(array(
       'id'           => new sfWidgetFormInputHidden(),
-      'id_jugador'   => new sfWidgetFormInputText(),
+      'id_jugador'   => new sfWidgetFormPropelChoice(array('model' => 'HlJugadores', 'add_empty' => true)),
       'fecha'        => new sfWidgetFormDateTime(),
       'titulo'       => new sfWidgetFormInputText(),
       'noticia'      => new sfWidgetFormTextarea(),
@@ -24,7 +24,7 @@ abstract class BaseHlNoticiasForm extends BaseFormPropel
 
     $this->setValidators(array(
       'id'           => new sfValidatorChoice(array('choices' => array($this->getObject()->getId()), 'empty_value' => $this->getObject()->getId(), 'required' => false)),
-      'id_jugador'   => new sfValidatorInteger(array('min' => -2147483648, 'max' => 2147483647, 'required' => false)),
+      'id_jugador'   => new sfValidatorPropelChoice(array('model' => 'HlJugadores', 'column' => 'id', 'required' => false)),
       'fecha'        => new sfValidatorDateTime(),
       'titulo'       => new sfValidatorString(array('max_length' => 255)),
       'noticia'      => new sfValidatorString(),

@@ -31,23 +31,20 @@ propel:
     contrasena: { phpName: Contrasena, type: VARCHAR, size: '128', required: true }
     email: { phpName: Email, type: VARCHAR, size: '40', required: true }
     descripcion: { phpName: Descripcion, type: CLOB, required: true }
-    id_victima: { phpName: IdVictima, type: INTEGER, size: '11', required: false }
-    confirmacion_muerte: { phpName: ConfirmacionMuerte, type: TINYINT, size: '1', required: true, defaultValue: '0' }
     activo: { phpName: Activo, type: TINYINT, size: '1', required: true, defaultValue: '1' }
-    _indexes: { id_departamento: [id_departamento], id_victima: [id_victima] }
-  hl_muertes:
-    _attributes: { phpName: HlMuertes }
-    id: { phpName: Id, type: INTEGER, size: '11', autoIncrement: true, required: true }
-    id_asesino: { phpName: IdAsesino, type: INTEGER, size: '11', required: true }
-    id_victima: { phpName: IdVictima, type: INTEGER, size: '11', required: true }
-    fecha_muerte: { phpName: FechaMuerte, type: TIMESTAMP, required: true }
-    arma: { phpName: Arma, type: VARCHAR, size: '50', required: true }
-    lugar: { phpName: Lugar, type: VARCHAR, size: '100', required: true }
-    _uniques: { id: [id] }
+    hombrelobo: { phpName: Hombrelobo, type: TINYINT, size: '1', required: true, defaultValue: '0' }
+    alcalde: { phpName: Alcalde, type: TINYINT, size: '1', required: true, defaultValue: '0' }
+    vidente: { phpName: Vidente, type: TINYINT, size: '1', required: true, defaultValue: '0' }
+    enamorado: { phpName: Enamorado, type: INTEGER, size: '1', required: true, defaultValue: '0' }
+    bruja: { phpName: Bruja, type: TINYINT, size: '1', required: true, defaultValue: '0' }
+    cazador: { phpName: Cazador, type: TINYINT, size: '1', required: true, defaultValue: '0' }
+    enfermo: { phpName: Enfermo, type: TINYINT, size: '1', required: true, defaultValue: '0' }
+    puta: { phpName: Puta, type: TINYINT, size: '1', required: true, defaultValue: '0' }
+    _indexes: { id_departamento: [id_departamento], hombrelobo: [hombrelobo, alcalde, vidente, enamorado, bruja, cazador, enfermo, puta] }
   hl_noticias:
     _attributes: { phpName: HlNoticias }
     id: { phpName: Id, type: INTEGER, size: '11', primaryKey: true, autoIncrement: true, required: true }
-    id_jugador: { phpName: IdJugador, type: INTEGER, size: '11', required: false }
+    id_jugador: { phpName: IdJugador, type: INTEGER, size: '11', required: false, foreignTable: hl_jugadores, foreignReference: id, onDelete: CASCADE, onUpdate: CASCADE }
     fecha: { phpName: Fecha, type: TIMESTAMP, required: true }
     titulo: { phpName: Titulo, type: VARCHAR, size: '255', required: true }
     noticia: { phpName: Noticia, type: CLOB, required: true }

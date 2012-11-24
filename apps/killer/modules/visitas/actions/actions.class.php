@@ -22,12 +22,6 @@ class visitasActions extends sfActions
     $this->jugadores = HlJugadoresPeer::doSelect($c);
   }
   
-  public function executeFichaAjax(sfWebRequest $request)
-  {
-    $this->jugador = KillJugadoresPeer::retrieveByPK($request->getParameter('id',null));
-    $this->setLayout(false);
-  }
-  
   public function executeRegistro(sfWebRequest $request)
   {
       

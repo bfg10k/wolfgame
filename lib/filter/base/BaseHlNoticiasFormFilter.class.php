@@ -12,7 +12,7 @@ abstract class BaseHlNoticiasFormFilter extends BaseFormFilterPropel
   public function setup()
   {
     $this->setWidgets(array(
-      'id_jugador'   => new sfWidgetFormFilterInput(),
+      'id_jugador'   => new sfWidgetFormPropelChoice(array('model' => 'HlJugadores', 'add_empty' => true)),
       'fecha'        => new sfWidgetFormFilterDate(array('from_date' => new sfWidgetFormDate(), 'to_date' => new sfWidgetFormDate(), 'with_empty' => false)),
       'titulo'       => new sfWidgetFormFilterInput(array('with_empty' => false)),
       'noticia'      => new sfWidgetFormFilterInput(array('with_empty' => false)),
@@ -20,7 +20,7 @@ abstract class BaseHlNoticiasFormFilter extends BaseFormFilterPropel
     ));
 
     $this->setValidators(array(
-      'id_jugador'   => new sfValidatorSchemaFilter('text', new sfValidatorInteger(array('required' => false))),
+      'id_jugador'   => new sfValidatorPropelChoice(array('required' => false, 'model' => 'HlJugadores', 'column' => 'id')),
       'fecha'        => new sfValidatorDateRange(array('required' => false, 'from_date' => new sfValidatorDate(array('required' => false)), 'to_date' => new sfValidatorDate(array('required' => false)))),
       'titulo'       => new sfValidatorPass(array('required' => false)),
       'noticia'      => new sfValidatorPass(array('required' => false)),
@@ -43,7 +43,7 @@ abstract class BaseHlNoticiasFormFilter extends BaseFormFilterPropel
   {
     return array(
       'id'           => 'Number',
-      'id_jugador'   => 'Number',
+      'id_jugador'   => 'ForeignKey',
       'fecha'        => 'Date',
       'titulo'       => 'Text',
       'noticia'      => 'Text',
