@@ -5,8 +5,8 @@ body {
     font-family:Verdana, Arial, Helvetica, sans-serif;
     text-align: justify;
     color:#333;
-    background-color:#FFF;
-    background-image:url(../images/blood_usb.jpg);
+    background-color:#000;
+    background-image:url(../images/sunset_sky_night.jpg);
     background-repeat:no-repeat;
     background-position:center top;
     /*-webkit-background-size: cover;
@@ -20,7 +20,7 @@ body {
     /*height:60px;*/
     width:1024px;
     height:156px;
-    background-image:url(../images/killer.png);
+    background-image:url(../images/hombrelobo.png);
     background-repeat:no-repeat;
     background-position:0 0;
     margin:0 auto;

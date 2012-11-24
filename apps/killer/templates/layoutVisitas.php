@@ -26,11 +26,7 @@
                 </form>
             </div>
           
-          <div id="contador">
-              <object type="application/x-shockwave-flash" data="http://www.oneplusyou.com/bb/files/countdown/countdown.swf?co=751313&bgcolor=FFFFFF&date_month=11&date_day=07&date_year=0&un=THE GAME STARTS&size=normal&mo=11&da=07&yr=2012" width="250" height="80">
-                  <param name="movie" value="http://www.oneplusyou.com/bb/files/countdown/countdown.swf?co=751313&bgcolor=FFFFFF&date_month=11&date_day=07&date_year=0&un=THE GAME STARTS&size=normal&mo=11&da=07&yr=2012" />
-                  <param name="bgcolor" value="#FFFFFF" /></object><img src="http://www.oneplusyou.com/q/img/bb_badges/countdown.jpg" alt="" style="display: none;" height="1" width="1" />
-          </div>
+          
             
       </div><!-- /#header -->
       
