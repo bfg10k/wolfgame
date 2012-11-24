@@ -39,6 +39,7 @@ class juegoActions extends sfActions {
         
         $c = new Criteria();
         $c->add(HlJugadoresPeer::ACTIVO,1);
+        $c->addAscendingOrderByColumn(HlJugadoresPeer::NOMBRE);
         $this->selectJugadoresVivos = new sfWidgetFormPropelChoice(array('model'=>'HlJugadores','criteria'=>$c));
 
         $estado = HlEstadoPeer::retrieveByPK(1);
@@ -132,7 +133,13 @@ class juegoActions extends sfActions {
         
         $c = new Criteria();
         $c->add(HlJugadoresPeer::ACTIVO,1);
+        $c->addAscendingOrderByColumn(HlJugadoresPeer::NOMBRE);
         $this->selectJugadoresVivos = new sfWidgetFormPropelChoice(array('model'=>'HlJugadores','criteria'=>$c));
+
+        $c = new Criteria();
+        $c->add(HlJugadoresPeer::ACTIVO,0);
+        $c->addAscendingOrderByColumn(HlJugadoresPeer::NOMBRE);
+        $this->selectJugadoresMuertos = new sfWidgetFormPropelChoice(array('model'=>'HlJugadores','criteria'=>$c));
 
         $this->setTemplate('objetivo');
         if($jugador->esHombrelobo()) return "Lobo";

@@ -40,7 +40,7 @@
       <label>Utilizar videncia con: </label>
       <?php echo $sf_data->getRaw('selectJugadoresVivos')->render('id_victima'); ?>  
       <button type="submit" class="btn btn-primary">Aceptar</button>
-      </form>
+    </form>
   </div>
   
   </div>
@@ -50,8 +50,18 @@
   <div>
     <dt>Rol</dt><dd>Bruja</dd>
   
-  <dt>Poción resucitadora</dt><dd> Dispones de una única poción para revivir a un jugador a tu elección.</dd> 
+  <dt>Poción resucitadora</dt><dd> Dispones de una única poción para revivir a un jugador a tu elección.</dd>
+  <form method="post" action="<?php echo url_for('juego/pocionVida'); ?>">
+      <label>Utilizar poción resucitadora en: </label>
+      <?php echo $sf_data->getRaw('selectJugadoresMuertos')->render('id_victima'); ?>  
+      <button type="submit" class="btn btn-primary">Aceptar</button>
+  </form>
   <dt>Poción mortífera</dt><dd> Dispones de una única poción para matar a un jugador a tu elección.</dd> 
+  <form method="post" action="<?php echo url_for('juego/pocionMuerte'); ?>">
+      <label>Utilizar poción mortífera contra: </label>
+      <?php echo $sf_data->getRaw('selectJugadoresVivos')->render('id_victima'); ?>  
+      <button type="submit" class="btn btn-primary">Aceptar</button>
+  </form>
   <dt>Embrujo</dt><dd> Una vez durante la partida puedes embrujar a un jugador para hablar y votar en su lugar.</dd> 
   
   </div>
