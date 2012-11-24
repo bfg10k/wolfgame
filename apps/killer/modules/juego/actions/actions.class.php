@@ -54,7 +54,8 @@ class juegoActions extends sfActions {
             $this->votos = HlVotosPeer::doSelect(new Criteria());
             $this->setTemplate("dia");
             if($jugador->esAlcalde()) return "Alcalde"; //Tiene botón de cerrar votaciones
-            elseif($jugador->esLobo()) return "Lobo"; //Que no pueda votar a los otros lobos
+            //elseif($jugador->esLobo()) return "Lobo"; //Que no pueda votar a los otros lobos
+            //¡¡¡Un jugador podría ser alcalde y lobo a la vez!!!
             else return "Generico";
             break;
           case "desempate":
@@ -99,30 +100,10 @@ class juegoActions extends sfActions {
         $c->add(HlJugadoresPeer::ACTIVO,1);
         $this->selectJugadoresVivos = new sfWidgetFormPropelChoice(array('model'=>'HlJugadores','criteria'=>$c));
 
-               
+        $this->setTemplate('objetivo');
+        if($jugador->esHombrelobo()) return "Lobo";
+        else return "Generico";
         
-        $rol="lobo";
-        switch ($rol) {
-          case "lobo":
-            return "Lobo";
-            break;
-          
-//          case "alcalde":
-//            return "Alcalde";
-//            break;
-//          
-//          case "vidente":
-//            return "Vidente";
-//            break;
-//          
-//          case "enamorado":
-//            return "Enamorado";
-//            break;  
-          
-          default:
-            return "Pueblerino";
-            break;
-        }
           
         
     }

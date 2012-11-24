@@ -54,6 +54,21 @@ class HlJugadores extends BaseHlJugadores {
     return $this->getEnamorado() > 0;
   }
   
+  public function getAmante()
+  {
+    if($this->getEnamorado() > 0)
+    {
+      $c = new Criteria();
+      $c->add(HlJugadoresPeer::ENAMORADO,$this->getEnamorado());
+      $c->add(HlJugadoresPeer::ID,$this->getId(),CRITERIA::NOT_EQUAL);
+      $pareja = HlJugadoresPeer::doSelectOne($c);
+      if($pareja instanceof HlJugadores) 
+        return $pareja;
+    }
+    
+    return $this; //Nunca debería llegar aquí
+  }
+  
   public function esCazador()
   {
     return $this->getCazador() > 0;
