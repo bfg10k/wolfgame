@@ -53,6 +53,9 @@ class juegoActions extends sfActions {
           case "dia":
             $this->votos = HlVotosPeer::doSelect(new Criteria());
             $this->setTemplate("dia");
+            if($jugador->esAlcalde()) return "Alcalde"; //Tiene botón de cerrar votaciones
+            elseif($jugador->esLobo()) return "Lobo"; //Que no pueda votar a los otros lobos
+            else return "Generico";
             break;
           case "desempate":
             $this->setTemplate("desempate");

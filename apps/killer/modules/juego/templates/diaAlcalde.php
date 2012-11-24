@@ -5,8 +5,6 @@
     <ul class="dropdown-menu">
     <li><a href="<?php echo url_for('juego/editar'); ?>"><i class="icon-pencil"></i> Editar perfil</a></li>
     <li><a href="<?php echo url_for('juego/salir'); ?>"><i class="icon-ban-circle"></i> Salir</a></li>
-    <li class="divider"></li>
-    <li><a href="<?php echo url_for('juego/rellenarInforme'); ?>"><i class="i"></i> Certifica la muerte de tu objetivo</a></li>
     </ul>
     </div>
 
@@ -23,9 +21,9 @@
 
 <div id="content-objetivo" class="rounded-corners">
   <form method="post" action="<?php echo url_for('juego/votar');?>">
-    <label>Elige a una persona para sacrificar: </label>
+    <label>Elige a la persona que creas que es el licántropo: </label>
     <?php echo $sf_data->getRaw('selectJugadoresVivos')->render('id_victima'); ?>     
-    <button type="submit">Acabar con ella</button>
+    <button type="submit" class="btn btn-primary">Votar</button>
   </form>
   Puedes cambiar de voto todas las veces que quieras mientras esté abierto el periodo de votación.
   <div>
@@ -39,6 +37,7 @@
       </div>
       <?php endforeach; ?>
     </div>
+    <button class="btn btn-primary">Cerrar la votación</button>
   </div>
 </div>
 
