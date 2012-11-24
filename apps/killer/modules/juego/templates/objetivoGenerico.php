@@ -35,6 +35,14 @@
   <dt>Videncia</dt><dd> Una vez cada día puedes utilizar tus poderes de videncia para 
   averiguar el rol o roles de un jugador.</dd> 
   
+  <div>
+    <form method="post" action="<?php echo url_for('juego/videncia'); ?>">
+      <label>Utilizar videncia con: </label>
+      <?php echo $sf_data->getRaw('selectJugadoresVivos')->render('id_victima'); ?>  
+      <button type="submit" class="btn btn-primary">Aceptar</button>
+      </form>
+  </div>
+  
   </div>
   <?php endif ?>
   

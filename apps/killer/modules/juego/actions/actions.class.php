@@ -200,11 +200,60 @@ class juegoActions extends sfActions {
           $victima->save();
           HlVotosPeer::doDeleteAll();
           $estado = HlEstadoPeer::retrieveByPK(1);
+          $estado->setRonda($estado->getRonda()+1);
           $estado->setFase('noche');
+          $estado->setVidente(0);
           $estado->save();
         }
         
         $this->redirect('juego/index');
+    }
+    
+    public function executeVidencia(sfWebRequest $request)
+    {
+        $id_jugador = $this->getUser()->getAttribute('user_id', null);
+        if (is_null($id_jugador))
+            $this->redirect('visitas/index');
+
+        $c = new Criteria();
+        $c->add(HlJugadoresPeer::ID, $id_jugador);
+        $jugador = HlJugadoresPeer::doSelectOne($c);
+        if (!($jugador instanceof HlJugadores)) {
+            $this->redirect('visitas/index');
+        }
+        
+        $this->jugador = $jugador;
+        $this->nombre = $jugador->getNombre();
+        
+        if($jugador->getActivo() === 0) $this->redirect('visitas/index');
+        if(!$jugador->esVidente()) $this->redirect('visitas/index');
+        
+        
+        $id_victima = $request->getParameter('id_victima');
+        $victima = HlJugadoresPeer::retrieveByPK($id_victima);
+        $estado = HlEstadoPeer::retrieveByPK(1);
+        if($estado->getVidente()!=0)
+        {
+          $this->mensaje = "Ya has utilizado la videncia en este turno";
+          return "Error";
+        }
+        elseif(!($victima instanceof HlJugadores))
+        {
+          $this->mensaje = "Error en la elección de la víctima.";
+          return "Error";
+        }
+        elseif($victima->getActivo() === 0)
+        {
+          $this->mensaje = "Debes elegir un jugador que todavía esté activo.";
+          return "Error";
+        }
+        else
+        {
+          $this->victima = $victima;
+          $estado->setVidente(1);
+          $estado->save();
+          return "Success";
+        }
     }
 
     public function executeSortear(sfWebRequest $request) {
