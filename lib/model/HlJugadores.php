@@ -33,5 +33,49 @@ class HlJugadores extends BaseHlJugadores {
   {
     return $this->getNombre()." (".$this->getHlDepartamentos()->getDepartamento().")";
   }
+  
+  public function esHombrelobo()
+  {
+    return $this->getHombrelobo() > 0;
+  }
+  
+  public function esAlcalde()
+  {
+    return $this->getAlcalde() > 0;
+  }
+  
+  public function esVidente()
+  {
+    return $this->getVidente() > 0;
+  }
+  
+  public function estaEnamorado()
+  {
+    return $this->getEnamorado() > 0;
+  }
+  
+  public function esCazador()
+  {
+    return $this->getCazador() > 0;
+  }
+  
+  public function esBruja()
+  {
+    return $this->getBruja() > 0;
+  }
+  
+  public function esPuta()
+  {
+    return $this->getPuta() > 0;
+  }
+  
+  public function estaEnfermo()
+  {
+    return $this->getEnfermo() > 0;
+  }
+  
+  
+ 
+        
 
 } // HlJugadores

@@ -58,28 +58,8 @@ class juegoActions extends sfActions {
             
         }
         
-        $rol="lobo";
-        switch ($rol) {
-          case "lobo":
-            return "Lobo";
-            break;
-          
-//          case "alcalde":
-//            return "Alcalde";
-//            break;
-//          
-//          case "vidente":
-//            return "Vidente";
-//            break;
-//          
-//          case "enamorado":
-//            return "Enamorado";
-//            break;  
-          
-          default:
-            return "Pueblerino";
-            break;
-        }
+        if($jugador->esHombrelobo()) return "Lobo";
+        else return "Pueblerino";
           
         
     }
