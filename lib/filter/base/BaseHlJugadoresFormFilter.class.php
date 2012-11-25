@@ -29,6 +29,7 @@ abstract class BaseHlJugadoresFormFilter extends BaseFormFilterPropel
       'cazador'         => new sfWidgetFormFilterInput(array('with_empty' => false)),
       'enfermo'         => new sfWidgetFormFilterInput(array('with_empty' => false)),
       'puta'            => new sfWidgetFormFilterInput(array('with_empty' => false)),
+      'accion'          => new sfWidgetFormFilterInput(array('with_empty' => false)),
     ));
 
     $this->setValidators(array(
@@ -49,6 +50,7 @@ abstract class BaseHlJugadoresFormFilter extends BaseFormFilterPropel
       'cazador'         => new sfValidatorSchemaFilter('text', new sfValidatorInteger(array('required' => false))),
       'enfermo'         => new sfValidatorSchemaFilter('text', new sfValidatorInteger(array('required' => false))),
       'puta'            => new sfValidatorSchemaFilter('text', new sfValidatorInteger(array('required' => false))),
+      'accion'          => new sfValidatorSchemaFilter('text', new sfValidatorInteger(array('required' => false))),
     ));
 
     $this->widgetSchema->setNameFormat('hl_jugadores_filters[%s]');
@@ -84,6 +86,7 @@ abstract class BaseHlJugadoresFormFilter extends BaseFormFilterPropel
       'cazador'         => 'Number',
       'enfermo'         => 'Number',
       'puta'            => 'Number',
+      'accion'          => 'Number',
     );
   }
 }

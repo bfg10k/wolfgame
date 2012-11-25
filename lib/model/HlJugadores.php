@@ -94,15 +94,21 @@ class HlJugadores extends BaseHlJugadores {
     $this->setActivo(0);
     $this->save();
     Juego::registraEvento($this->getNombre().' muere.');
-      
+    
+    if($this->esCazador()) 
+    {
+      Juego::registraEvento($this->getNombre().' era: Cazador.');
+      $this->setAccion(1);
+      $this->save();
+    } 
     if($this->estaEnamorado()) 
     {
       Juego::registraEvento($this->getNombre().' era: Enamorado.');
       $amante = $this->getAmante();
       if($amante->getActivo()==1)
       {
-        $amante->muere();
         Juego::registraEvento($amante->getNombre().' estaba enamorado de '.$this->getNombre(). ' y ha muerto de pena.');
+        $amante->muere();
       }
     } 
     if($this->esAlcalde()) 
@@ -112,6 +118,7 @@ class HlJugadores extends BaseHlJugadores {
       Juego::sortearAlcalde();
       $this->save();
     } 
+    
   }
   
   public function revive()

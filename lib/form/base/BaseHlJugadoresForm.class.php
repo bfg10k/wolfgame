@@ -32,6 +32,7 @@ abstract class BaseHlJugadoresForm extends BaseFormPropel
       'cazador'         => new sfWidgetFormInputText(),
       'enfermo'         => new sfWidgetFormInputText(),
       'puta'            => new sfWidgetFormInputText(),
+      'accion'          => new sfWidgetFormInputText(),
     ));
 
     $this->setValidators(array(
@@ -53,6 +54,7 @@ abstract class BaseHlJugadoresForm extends BaseFormPropel
       'cazador'         => new sfValidatorInteger(array('min' => -128, 'max' => 127)),
       'enfermo'         => new sfValidatorInteger(array('min' => -128, 'max' => 127)),
       'puta'            => new sfValidatorInteger(array('min' => -128, 'max' => 127)),
+      'accion'          => new sfValidatorInteger(array('min' => -128, 'max' => 127)),
     ));
 
     $this->widgetSchema->setNameFormat('hl_jugadores[%s]');

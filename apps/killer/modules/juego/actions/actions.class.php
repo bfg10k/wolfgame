@@ -31,7 +31,8 @@ class juegoActions extends sfActions {
             $this->setTemplate('indexMuerto');
             $this->jugador = $jugador;
             $this->nombre = $jugador->getNombre();
-            return "Success";
+            if(!($jugador->esCazador() && $jugador->getAccion()==1))
+              return "Success";
         }
         
         $this->jugador = $jugador;
@@ -100,6 +101,10 @@ class juegoActions extends sfActions {
             $this->setTemplate("desempate");
             if($jugador->esAlcalde()) return "Alcalde";
             else return "Generico";
+          case "cazador":
+            $this->setTemplate("cazador");
+            if($jugador->esCazador()) return "Cazador";
+            else return "Generico";
           default:
             return "Error"; //No ha sido posible definir la fase
             break;
@@ -107,7 +112,7 @@ class juegoActions extends sfActions {
         }
         
         if($jugador->esHombrelobo()) return "Lobo";
-        else return "Pueblerino";
+        else return "Generico";
           
         
     }
@@ -178,7 +183,8 @@ class juegoActions extends sfActions {
           if(Juego::todosLobosHanJugado())
           {
             $estado = HlEstadoPeer::retrieveByPK(1);
-            $estado->setFase('dia');
+            if(Juego::cazadorAcabaDeMorir()) $estado->setFase('cazador');
+            else $estado->setFase('dia');
             $estado->save();
           }
         }
@@ -332,7 +338,7 @@ class juegoActions extends sfActions {
           $estado->setFase('noche');
           $estado->save();
           Juego::activarHombresLobo();
-          $Juego::activarVidencia();
+          Juego::activarVidencia();
           Juego::activarBrujeria();
         }
         $this->redirect('juego/index');
@@ -403,6 +409,7 @@ class juegoActions extends sfActions {
         Juego::sortearEnamorados(2); //Dos parejas
         Juego::sortearVidente(1);
         Juego::sortearBruja(1);
+        Juego::sortearCazador(1);
         Juego::activarHombresLobo();
         Juego::activarVidencia();
         Juego::activarBrujeria();
@@ -536,6 +543,69 @@ class juegoActions extends sfActions {
           $estado->setPocionVida($estado->getPocionVida()-1);
           $estado->save();
         }
+        $this->redirect('juego/blog');
+    }
+    
+    public function executeEscopeta(sfWebRequest $request) {
+        $id_jugador = $this->getUser()->getAttribute('user_id', null);
+        if (is_null($id_jugador))
+            $this->redirect('visitas/index');
+
+        $c = new Criteria();
+        $c->add(HlJugadoresPeer::ID, $id_jugador);
+        $jugador = HlJugadoresPeer::doSelectOne($c);
+        if (!($jugador instanceof HlJugadores)) {
+            $this->redirect('visitas/index');
+        }
+
+        $this->nombre = $jugador->getNombre();
+        
+        $id_victima = $request->getParameter('id_victima');
+        $victima = HlJugadoresPeer::retrieveByPK($id_victima);
+        $estado = HlEstadoPeer::retrieveByPK(1);
+        if(!($victima instanceof HlJugadores))
+        {
+          $this->mensaje = "Error en la elección del jugador.";
+          return "Error";
+        }
+        elseif($victima->getActivo() === 0)
+        {
+          $this->mensaje = "Debes elegir un jugador que esté vivo.";
+          return "Error";
+        }
+        else
+        {
+          Juego::registraEvento('El cazador disparó su escopeta.');
+          $victima->muere();
+          $jugador->setAccion(0);
+          $jugador->save();
+          $estado->setFase('dia');
+          $estado->save();
+        }
+        $this->redirect('juego/blog');
+    }
+    
+    public function executeNoescopeta(sfWebRequest $request) {
+        $id_jugador = $this->getUser()->getAttribute('user_id', null);
+        if (is_null($id_jugador))
+            $this->redirect('visitas/index');
+
+        $c = new Criteria();
+        $c->add(HlJugadoresPeer::ID, $id_jugador);
+        $jugador = HlJugadoresPeer::doSelectOne($c);
+        if (!($jugador instanceof HlJugadores)) {
+            $this->redirect('visitas/index');
+        }
+
+        $this->nombre = $jugador->getNombre();
+        
+        Juego::registraEvento('El cazador no disparó su escopeta.');
+        $jugador->setAccion(0);
+        $jugador->save();
+        $estado = HlEstadoPeer::retrieveByPK(1);
+        $estado->setFase('dia');
+        $estado->save();
+        
         $this->redirect('juego/blog');
     }
 

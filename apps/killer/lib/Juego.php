@@ -66,6 +66,7 @@ class Juego {
     $c->add(HlJugadoresPeer::HOMBRELOBO,0);
     $c->add(HlJugadoresPeer::VIDENTE,0);
     $c->add(HlJugadoresPeer::BRUJA,0);
+    $c->add(HlJugadoresPeer::CAZADOR,0);
     $c->add(HlJugadoresPeer::ENAMORADO,0);
     $jugadores = HlJugadoresPeer::doSelect($c);
     
@@ -75,6 +76,7 @@ class Juego {
     for($i=0;$i<$num;$i++)
     {
       $jugadores[$i]->setHombrelobo($i+1);
+      $jugadores[$i]->setAccion(1);
       $jugadores[$i]->save();
     }
   }
@@ -99,6 +101,7 @@ class Juego {
     $c->add(HlJugadoresPeer::HOMBRELOBO,0);
     $c->add(HlJugadoresPeer::VIDENTE,0);
     $c->add(HlJugadoresPeer::BRUJA,0);
+    $c->add(HlJugadoresPeer::CAZADOR,0);
     $c->add(HlJugadoresPeer::ENAMORADO,0);
     $jugadores = HlJugadoresPeer::doSelect($c);
     
@@ -119,6 +122,7 @@ class Juego {
     $c->add(HlJugadoresPeer::HOMBRELOBO,0);
     $c->add(HlJugadoresPeer::VIDENTE,0);
     $c->add(HlJugadoresPeer::BRUJA,0);
+    $c->add(HlJugadoresPeer::CAZADOR,0);
     $c->add(HlJugadoresPeer::ENAMORADO,0);
     $jugadores = HlJugadoresPeer::doSelect($c);
     
@@ -128,6 +132,27 @@ class Juego {
     for($i=0;$i<$num;$i++)
     {
       $jugadores[$i]->setBruja($i+1);
+      $jugadores[$i]->save();
+    }
+  }
+  
+  public static function sortearCazador($num)
+  {
+    $c = new Criteria();
+    $c->add(HlJugadoresPeer::ACTIVO,1);
+    $c->add(HlJugadoresPeer::HOMBRELOBO,0);
+    $c->add(HlJugadoresPeer::VIDENTE,0);
+    $c->add(HlJugadoresPeer::BRUJA,0);
+    $c->add(HlJugadoresPeer::CAZADOR,0);
+    $c->add(HlJugadoresPeer::ENAMORADO,0);
+    $jugadores = HlJugadoresPeer::doSelect($c);
+    
+    shuffle($jugadores);
+    
+    $i=0;
+    for($i=0;$i<$num;$i++)
+    {
+      $jugadores[$i]->setCazador($i+1);
       $jugadores[$i]->save();
     }
   }
@@ -143,6 +168,7 @@ class Juego {
     $c->add(HlJugadoresPeer::HOMBRELOBO,0);
     $c->add(HlJugadoresPeer::VIDENTE,0);
     $c->add(HlJugadoresPeer::BRUJA,0);
+    $c->add(HlJugadoresPeer::CAZADOR,0);
     $c->add(HlJugadoresPeer::ENAMORADO,0);
     $jugadores = HlJugadoresPeer::doSelect($c);
     
@@ -222,6 +248,17 @@ class Juego {
     $estado = HlEstadoPeer::retrieveByPK(1);
     $num_pociones = $estado->getPocionMuerte();
     return $num_pociones > 0;
+  }
+  
+  public static function cazadorAcabaDeMorir()
+  {
+    $c = new Criteria();
+    $c->add(HlJugadoresPeer::ACTIVO,0);
+    $c->add(HlJugadoresPeer::CAZADOR,1,CRITERIA::GREATER_EQUAL);
+    $c->add(HlJugadoresPeer::ACCION,1);
+    $numCazadoresRecienMuertos = HlJugadoresPeer::doCount($c);
+    echo $numCazadoresRecienMuertos;
+    return ($numCazadoresRecienMuertos > 0);
   }
   
 }
