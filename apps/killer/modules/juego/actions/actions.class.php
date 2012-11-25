@@ -293,6 +293,7 @@ class juegoActions extends sfActions {
             $estado->save();
             Juego::activarHombresLobo();
             Juego::activarVidencia();
+            Juego::activarBrujeria();
           }
           $this->redirect('juego/index');
         }
@@ -330,7 +331,9 @@ class juegoActions extends sfActions {
           $estado->setRonda($estado->getRonda()+1);
           $estado->setFase('noche');
           $estado->save();
+          Juego::activarHombresLobo();
           $Juego::activarVidencia();
+          Juego::activarBrujeria();
         }
         $this->redirect('juego/index');
         /** @todo escribir muerte en el blog */
@@ -401,6 +404,8 @@ class juegoActions extends sfActions {
         Juego::sortearVidente(1);
         Juego::sortearBruja(1);
         Juego::activarHombresLobo();
+        Juego::activarVidencia();
+        Juego::activarBrujeria();
         
         
 
@@ -444,6 +449,94 @@ class juegoActions extends sfActions {
         $jugador->save();
         Juego::sortearLobo(1);
         $this->redirect('juego/index');
+    }
+    
+    public function executePocionMuerte(sfWebRequest $request) {
+        $id_jugador = $this->getUser()->getAttribute('user_id', null);
+        if (is_null($id_jugador))
+            $this->redirect('visitas/index');
+
+        $c = new Criteria();
+        $c->add(HlJugadoresPeer::ID, $id_jugador);
+        $jugador = HlJugadoresPeer::doSelectOne($c);
+        if (!($jugador instanceof HlJugadores)) {
+            $this->redirect('visitas/index');
+        }
+
+        $this->nombre = $jugador->getNombre();
+        
+        $id_victima = $request->getParameter('id_victima');
+        $victima = HlJugadoresPeer::retrieveByPK($id_victima);
+        $estado = HlEstadoPeer::retrieveByPK(1);
+        if($estado->getPocionMuerte()==0)
+        {
+          $this->mensaje = "Ya has utilizado esta poción.";
+          return "Error";
+        }
+        elseif(!($victima instanceof HlJugadores))
+        {
+          $this->mensaje = "Error en la elección de la víctima.";
+          return "Error";
+        }
+        elseif($victima->getActivo() === 0)
+        {
+          $this->mensaje = "Debes elegir un jugador que todavía esté activo.";
+          return "Error";
+        }
+        else
+        {
+          Juego::registraEvento('La bruja utiliza su poción de muerte.');
+          $victima->muere();
+          $jugador->setAccion(0);
+          $jugador->save();
+          $estado->setPocionMuerte($estado->getPocionMuerte()-1);
+          $estado->save();
+        }
+        $this->redirect('juego/blog');
+    }
+    
+    public function executePocionVida(sfWebRequest $request) {
+        $id_jugador = $this->getUser()->getAttribute('user_id', null);
+        if (is_null($id_jugador))
+            $this->redirect('visitas/index');
+
+        $c = new Criteria();
+        $c->add(HlJugadoresPeer::ID, $id_jugador);
+        $jugador = HlJugadoresPeer::doSelectOne($c);
+        if (!($jugador instanceof HlJugadores)) {
+            $this->redirect('visitas/index');
+        }
+
+        $this->nombre = $jugador->getNombre();
+        
+        $id_victima = $request->getParameter('id_victima');
+        $victima = HlJugadoresPeer::retrieveByPK($id_victima);
+        $estado = HlEstadoPeer::retrieveByPK(1);
+        if($estado->getPocionVida()==0)
+        {
+          $this->mensaje = "Ya has utilizado esta poción.";
+          return "Error";
+        }
+        elseif(!($victima instanceof HlJugadores))
+        {
+          $this->mensaje = "Error en la elección del jugador.";
+          return "Error";
+        }
+        elseif($victima->getActivo() === 1)
+        {
+          $this->mensaje = "Debes elegir un jugador que esté muerto.";
+          return "Error";
+        }
+        else
+        {
+          Juego::registraEvento('La bruja utiliza su poción de vida.');
+          $victima->revive();
+          $jugador->setAccion(0);
+          $jugador->save();
+          $estado->setPocionVida($estado->getPocionVida()-1);
+          $estado->save();
+        }
+        $this->redirect('juego/blog');
     }
 
     

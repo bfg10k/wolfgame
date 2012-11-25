@@ -37,7 +37,11 @@ class Juego {
     $estado->setRonda(0);
     $estado->setFase('noche');
     $estado->setVidente(1);
+    $estado->setPocionVida(1);
+    $estado->setPocionMuerte(1);
     $estado->save();
+    
+    HlVotosPeer::doDeleteAll();
     
     $jugadores = HlJugadoresPeer::doSelect(new Criteria());
     foreach ($jugadores as $jugador) {
@@ -169,6 +173,19 @@ class Juego {
     }
   }
   
+  public static function activarBrujeria()
+  {
+    $c = new Criteria();
+    $c->add(HlJugadoresPeer::ACTIVO,1);
+    $c->add(HlJugadoresPeer::BRUJA,1,CRITERIA::GREATER_EQUAL);
+    $brujas = HlJugadoresPeer::doSelect($c);
+    foreach ($brujas as $bruja)
+    {
+      $bruja->setAccion(1);
+      $bruja->save();
+    }
+  }
+  
   public static function activarVidencia()
   {
     $estado = HlEstadoPeer::retrieveByPK(1);
@@ -191,6 +208,20 @@ class Juego {
     $c->add(HlJugadoresPeer::ACCION,1);
     $numLobosPorJugar = HlJugadoresPeer::doCount($c);
     return ($numLobosPorJugar == 0);
+  }
+  
+  public static function puedeUtilizarPocionVida()
+  {
+    $estado = HlEstadoPeer::retrieveByPK(1);
+    $num_pociones = $estado->getPocionVida();
+    return $num_pociones > 0;
+  }
+  
+  public static function puedeUtilizarPocionMuerte()
+  {
+    $estado = HlEstadoPeer::retrieveByPK(1);
+    $num_pociones = $estado->getPocionMuerte();
+    return $num_pociones > 0;
   }
   
 }
