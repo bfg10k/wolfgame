@@ -77,7 +77,7 @@ body {
 #main_content h1, #content-user h1{
     font-family: Oswald;
     font-weight: 700;
-    color: #751313;
+    color: #C5003D;
 }
 
 #main_content h2, #content-user h2{
@@ -103,7 +103,7 @@ body {
     border-width: 1px;
     display: block;
     float: right;
-    padding-right: 10px;
+    padding: 15px 10px;
 }
 
 #content-user{
