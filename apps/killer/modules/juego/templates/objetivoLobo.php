@@ -12,30 +12,36 @@
 
 <div id="nav-user">
     <ul class="nav nav-list">
-    <li class="active"><a href="<?php echo url_for('juego/index'); ?>"><i class="icon-home icon-white"></i> Inicio</a></li>
-    <li><a href="<?php echo url_for('juego/objetivo'); ?>"><i class="icon-screenshot"></i>Tu personaje</a></li>
+    <li><a href="<?php echo url_for('juego/index'); ?>"><i class="icon-home"></i> Inicio</a></li>
+    <li class="active"><a href="<?php echo url_for('juego/objetivo'); ?>"><i class="icon-screenshot"></i>Tu personaje</a></li>
     <li><a href="<?php echo url_for('juego/blog'); ?>"><i class="icon-eye-open"></i>INTEF News</a></li> 
     </ul>
 </div>
   
 
 <div id="content-objetivo" class="rounded-corners">
-  <p>Rol: Hombre-Lobo</p>
   
-  <p>Objetivo: Matar a todos los habitantes del pueblo.</p>
+    <div>
+    <img id="card" class="pic-1" src="<?php echo image_path("licantropo.jpg"); ?>" width="200" height="320" />
+    </div>
+    
+    <div id="rol">
+        <p>Rol: Hombre-Lobo</p>
+
+        <p>Objetivo: Matar a todos los habitantes del pueblo.</p>
+
+        <p>Función: Cada vez que llega la noche, te transformas en lobo y matas a un habitante del pueblo.</p>
+
+        <div>
+          Los lobos sois:
+          <ul>
+          <?php foreach($lobos as $lobo): ?>
+            <li><?php echo $lobo ?></li>
+          <?php endforeach ?>
+          </ul>
+        </div>
   
-  <p>Función: Cada vez que llega la noche, te transformas en lobo y matas a un habitante del pueblo.</p>
-  
-  <div>
-    Los lobos sois:
-    <ul>
-    <?php foreach($lobos as $lobo): ?>
-      <li><?php echo $lobo ?></li>
-    <?php endforeach ?>
-    </ul>
-  </div>
-  
-  
+    </div>
   
   <?php if($jugador->esAlcalde()):?>
   <div>

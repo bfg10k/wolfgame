@@ -321,3 +321,19 @@ body {
     border-right: 50px solid transparent;
     border-bottom: 100px solid #063540;
 }
+
+#card{
+    float:left;
+    margin: 10px 0 10px 25px;
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: 1px solid #CCCCCC;
+    border-radius: 5px 5px 5px 5px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    padding: 8px;
+}
+
+#rol{
+    float: right;
+    width: 500px;
+    padding: 15px 10px;
+}
