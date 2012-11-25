@@ -408,6 +408,8 @@ class juegoActions extends sfActions {
         if (!($jugador instanceof HlJugadores)) {
             $this->redirect('visitas/index');
         }
+        
+        $this->redirect('juego/index'); //Inhabilitación del método
 
         Juego::resetear();
         Juego::sortearLobo(2);
@@ -419,8 +421,6 @@ class juegoActions extends sfActions {
         Juego::activarHombresLobo();
         Juego::activarVidencia();
         Juego::activarBrujeria();
-        
-        
 
         $this->redirect('juego/index');
     }
