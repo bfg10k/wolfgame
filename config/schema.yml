@@ -24,7 +24,7 @@ propel:
     _attributes: { phpName: HlJugadores }
     id: { phpName: Id, type: INTEGER, size: '11', primaryKey: true, autoIncrement: true, required: true }
     nombre: { phpName: Nombre, type: VARCHAR, size: '40', required: true }
-    id_departamento: { phpName: IdDepartamento, type: INTEGER, size: '11', required: true, foreignTable: hl_departamentos, foreignReference: id, onDelete: CASCADE, onUpdate: CASCADE }
+    id_departamento: { phpName: IdDepartamento, type: INTEGER, size: '11', required: true, foreignTable: hl_departamentos, foreignReference: id, onDelete: RESTRICT, onUpdate: CASCADE }
     alias: { phpName: Alias, type: VARCHAR, size: '40', required: true }
     foto: { phpName: Foto, type: VARCHAR, size: '255', required: true }
     usuario: { phpName: Usuario, type: VARCHAR, size: '128', required: true }
@@ -40,11 +40,12 @@ propel:
     cazador: { phpName: Cazador, type: TINYINT, size: '1', required: true, defaultValue: '0' }
     enfermo: { phpName: Enfermo, type: TINYINT, size: '1', required: true, defaultValue: '0' }
     puta: { phpName: Puta, type: TINYINT, size: '1', required: true, defaultValue: '0' }
+    accion: { phpName: Accion, type: TINYINT, size: '1', required: true, defaultValue: '0' }
     _indexes: { id_departamento: [id_departamento], hombrelobo: [hombrelobo, alcalde, vidente, enamorado, bruja, cazador, enfermo, puta] }
   hl_noticias:
     _attributes: { phpName: HlNoticias }
     id: { phpName: Id, type: INTEGER, size: '11', primaryKey: true, autoIncrement: true, required: true }
-    id_jugador: { phpName: IdJugador, type: INTEGER, size: '11', required: false, foreignTable: hl_jugadores, foreignReference: id, onDelete: CASCADE, onUpdate: CASCADE }
+    id_jugador: { phpName: IdJugador, type: INTEGER, size: '11', required: false, foreignTable: hl_jugadores, foreignReference: id, onDelete: RESTRICT, onUpdate: CASCADE }
     fecha: { phpName: Fecha, type: TIMESTAMP, required: true }
     titulo: { phpName: Titulo, type: VARCHAR, size: '255', required: true }
     noticia: { phpName: Noticia, type: CLOB, required: true }
@@ -54,6 +55,6 @@ propel:
     _attributes: { phpName: HlVotos }
     id: { phpName: Id, type: INTEGER, size: '11', primaryKey: true, autoIncrement: true, required: true }
     id_ronda: { phpName: IdRonda, type: INTEGER, size: '2', required: true, index: 'true' }
-    id_jugador: { phpName: IdJugador, type: INTEGER, size: '11', required: true, foreignTable: hl_jugadores, foreignReference: id, onDelete: CASCADE, onUpdate: CASCADE }
-    id_victima: { phpName: IdVictima, type: INTEGER, size: '11', required: true, foreignTable: hl_jugadores, foreignReference: id, onDelete: CASCADE, onUpdate: CASCADE }
+    id_jugador: { phpName: IdJugador, type: INTEGER, size: '11', required: true, foreignTable: hl_jugadores, foreignReference: id, onDelete: RESTRICT, onUpdate: CASCADE }
+    id_victima: { phpName: IdVictima, type: INTEGER, size: '11', required: true, foreignTable: hl_jugadores, foreignReference: id, onDelete: RESTRICT, onUpdate: CASCADE }
     _indexes: { id_jugador: [id_jugador], id_victima: [id_victima] }
