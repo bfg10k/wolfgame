@@ -165,6 +165,7 @@ class juegoActions extends sfActions {
             $this->redirect('visitas/index');
         }
         
+        /** @todo verificar que el jugador es un hombre lobo */
         $id_victima = $request->getParameter('id_victima');
         $victima = HlJugadoresPeer::retrieveByPK($id_victima);
         if($victima instanceof HlJugadores)
@@ -172,9 +173,14 @@ class juegoActions extends sfActions {
           Juego::registraEvento('Un hombre lobo ha matado.');
           $victima->muere();
           $victima->save();
-          $estado = HlEstadoPeer::retrieveByPK(1);
-          $estado->setFase('dia');
-          $estado->save();
+          $jugador->setAccion(0); //Indica que ya ha matado
+          $jugador->save();
+          if(Juego::todosLobosHanJugado())
+          {
+            $estado = HlEstadoPeer::retrieveByPK(1);
+            $estado->setFase('dia');
+            $estado->save();
+          }
         }
         
         $this->redirect('juego/index');
@@ -284,8 +290,9 @@ class juegoActions extends sfActions {
             $victima->save();
             $estado->setRonda($estado->getRonda()+1);
             $estado->setFase('noche');
-            $estado->setVidente(0);
             $estado->save();
+            Juego::activarHombresLobo();
+            Juego::activarVidencia();
           }
           $this->redirect('juego/index');
         }
@@ -322,8 +329,8 @@ class juegoActions extends sfActions {
           $estado = HlEstadoPeer::retrieveByPK(1);
           $estado->setRonda($estado->getRonda()+1);
           $estado->setFase('noche');
-          $estado->setVidente(0);
           $estado->save();
+          $Juego::activarVidencia();
         }
         $this->redirect('juego/index');
         /** @todo escribir muerte en el blog */
@@ -352,7 +359,7 @@ class juegoActions extends sfActions {
         $id_victima = $request->getParameter('id_victima');
         $victima = HlJugadoresPeer::retrieveByPK($id_victima);
         $estado = HlEstadoPeer::retrieveByPK(1);
-        if($estado->getVidente()!=0)
+        if($estado->getVidente()==0)
         {
           $this->mensaje = "Ya has utilizado la videncia en este turno";
           return "Error";
@@ -370,8 +377,7 @@ class juegoActions extends sfActions {
         else
         {
           $this->victima = $victima;
-          $estado->setVidente(1);
-          $estado->save();
+          Juego::desactivarVidencia();
           return "Success";
         }
     }
@@ -388,23 +394,15 @@ class juegoActions extends sfActions {
             $this->redirect('visitas/index');
         }
 
-        if ($jugador->getIdVictima() == 0) {//Solamente en este caso se realiza el sorteo
-            $todos = HlJugadoresPeer::doSelect(new Criteria());
-            foreach ($todos as $asesino) {
-                $arrayasesinos[$asesino->getId()] = $asesino->getIdDepartamento();
-            }
-
-            do {
-                $arraysorteado = $this->ashuffle($arrayasesinos);
-            } while (!$this->comprobar($arraysorteado));
-
-            $orden = array_keys($arraysorteado);
-            foreach ($orden as $pos => $idJugador) {
-                $jugador = HlJugadoresPeer::retrieveByPK($idJugador);
-                $jugador->setIdVictima($orden[($pos + 1) % count($orden)]);
-                $jugador->save();
-            }
-        }
+        Juego::resetear();
+        Juego::sortearLobo(2);
+        Juego::sortearAlcalde(1);
+        Juego::sortearEnamorados(2); //Dos parejas
+        Juego::sortearVidente(1);
+        Juego::sortearBruja(1);
+        Juego::activarHombresLobo();
+        
+        
 
         $this->redirect('juego/index');
     }
@@ -427,6 +425,25 @@ class juegoActions extends sfActions {
             $value_ant = $value;
         }
         return $salida;
+    }
+    
+    public function executeRenunciaHombrelobo()
+    {
+        $id_jugador = $this->getUser()->getAttribute('user_id', null);
+        if (is_null($id_jugador))
+            $this->redirect('visitas/index');
+
+        $c = new Criteria();
+        $c->add(HlJugadoresPeer::ID, $id_jugador);
+        $jugador = HlJugadoresPeer::doSelectOne($c);
+        if (!($jugador instanceof HlJugadores)) {
+            $this->redirect('visitas/index');
+        }
+        
+        $jugador->setHombrelobo(0);
+        $jugador->save();
+        Juego::sortearLobo(1);
+        $this->redirect('juego/index');
     }
 
     

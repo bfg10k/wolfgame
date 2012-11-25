@@ -21,11 +21,28 @@
 
 
 <div id="content-objetivo" class="rounded-corners">
-  <form method="post" action="<?php echo url_for('juego/matarHL');?>">
-    <label>Elige a tu siguiente víctima: </label>
-    <?php echo $sf_data->getRaw('selectJugadoresVivos')->render('id_victima'); ?>     
-    <button type="submit">Acabar con ella</button>
-  </form>
+  <?php if(Juego::getRonda()==0): ?>
+  <p>Eres un licántropo (hombre-lobo). Este rol es crucial e implica tener que entrar en la web todas 
+  las tardes (laborables), ya sea desde el trabajo o desde casa. Si no lo haces, el juego se quedará parado.</p>
+  <p>El juego puede llegar a durar 10 días (laborables). Si no crees que puedas dedicarte a él al menos
+  una vez cada tarde-noche, por favor, renuncia a este rol por el bien de todos.</p>
+  
+  <a class="btn btn-inverse" href="<?php echo url_for('juego/renunciaHombrelobo'); ?>">Renuncio a ser hombre-lobo.</a>
+  
+  <p>Para aceptar el rol, simplemente empieza a jugar matando a uno de los jugadores.</p>
+  <p>Consulta "Tu personaje" para obtener más información.</p>
+  <?php endif ?>
+    
+    
+  <?php if($jugador->getAccion()==1): ?>
+    <form method="post" action="<?php echo url_for('juego/matarHL');?>">
+      <label>Elige a tu siguiente víctima: </label>
+      <?php echo $sf_data->getRaw('selectJugadoresVivos')->render('id_victima'); ?>     
+      <button type="submit" class="btn btn-danger">Acabar con ella</button>
+    </form>
+  <?php else: ?>
+    Espera a que el resto de hombres lobo actúen.
+  <?php endif ?>
 </div>
   
   

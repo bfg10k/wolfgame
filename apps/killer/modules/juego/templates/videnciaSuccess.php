@@ -22,6 +22,7 @@
 <div id="content-objetivo" class="rounded-corners">
   Este es el rol de <?php echo $victima ?>:
   
+  <?php echo $victima->informarRoles(); ?>
   
   Memoriza bien esta información pues no volverá a aparecer en ningún sitio.
   

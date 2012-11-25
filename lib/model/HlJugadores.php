@@ -114,6 +114,24 @@ class HlJugadores extends BaseHlJugadores {
     } 
   }
   
+  public function informarRoles()
+  {
+    
+    
+    $roles = array();
+    if($this->esAlcalde()) $roles[] = "es Alcalde";
+    if($this->esBruja()) $roles[] = "es Bruja";
+    if($this->esCazador()) $roles[] = "es Cazador";
+    if($this->esHombrelobo()) $roles[] = "es Hombre Lobo";
+    if($this->esPuta()) $roles[] = "es Puta";
+    if($this->esVidente()) $roles[] = "es Vidente";
+    if($this->estaEnamorado()) $roles[] = "está Enamorado de ".$this->getAmante()->getNombre();
+    if($this->estaEnfermo()) $roles[] = "está Enfermo";
+    
+    if(count($roles)==0) return "Este jugador no tiene ningún rol.";
+    else return "Este jugador ". implode(',', $roles);
+  }
+  
   
   
  
