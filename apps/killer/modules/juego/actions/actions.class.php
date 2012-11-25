@@ -150,7 +150,13 @@ class juegoActions extends sfActions {
         $this->selectJugadoresMuertos = new sfWidgetFormPropelChoice(array('model'=>'HlJugadores','criteria'=>$c));
 
         $this->setTemplate('objetivo');
-        if($jugador->esHombrelobo()) return "Lobo";
+        if($jugador->esHombrelobo()) 
+        {
+          $c = new Criteria();
+          $c->add(HlJugadoresPeer::HOMBRELOBO,1,CRITERIA::GREATER_EQUAL);
+          $this->lobos = HlJugadoresPeer::doSelect($c);
+          return "Lobo";
+        }
         else return "Generico";
         
           

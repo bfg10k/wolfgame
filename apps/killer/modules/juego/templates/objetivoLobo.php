@@ -20,11 +20,22 @@
   
 
 <div id="content-objetivo" class="rounded-corners">
-  Rol: Hombre-Lobo
+  <p>Rol: Hombre-Lobo</p>
   
-  Objetivo: Matar a todos los habitantes del pueblo.
+  <p>Objetivo: Matar a todos los habitantes del pueblo.</p>
   
-  Función: Cada vez que llega la noche, te transformas en lobo y matas a un habitante del pueblo.
+  <p>Función: Cada vez que llega la noche, te transformas en lobo y matas a un habitante del pueblo.</p>
+  
+  <div>
+    Los lobos sois:
+    <ul>
+    <?php foreach($lobos as $lobo): ?>
+      <li><?php echo $lobo ?></li>
+    <?php endforeach ?>
+    </ul>
+  </div>
+  
+  
   
   <?php if($jugador->esAlcalde()):?>
   <div>
