@@ -114,10 +114,15 @@ class HlJugadores extends BaseHlJugadores {
     } 
   }
   
+  public function revive()
+  {
+    $this->setActivo(1);
+    $this->save();
+    Juego::registraEvento($this->getNombre().' vuelve a la vida.');
+  }
+  
   public function informarRoles()
   {
-    
-    
     $roles = array();
     if($this->esAlcalde()) $roles[] = "es Alcalde";
     if($this->esBruja()) $roles[] = "es Bruja";
