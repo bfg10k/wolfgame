@@ -95,6 +95,18 @@ class HlJugadores extends BaseHlJugadores {
     $this->save();
     Juego::registraEvento($this->getNombre().' muere.');
     
+    if($this->esHombrelobo()) 
+    {
+      Juego::registraEvento($this->getNombre().' era: licántropo.');
+    } 
+    if($this->esBruja()) 
+    {
+      Juego::registraEvento($this->getNombre().' era: Bruja.');
+    } 
+    if($this->esVidente()) 
+    {
+      Juego::registraEvento($this->getNombre().' era: Vidente.');
+    } 
     if($this->esCazador()) 
     {
       Juego::registraEvento($this->getNombre().' era: Cazador.');
