@@ -53,6 +53,7 @@ propel:
   hl_votos:
     _attributes: { phpName: HlVotos }
     id: { phpName: Id, type: INTEGER, size: '11', primaryKey: true, autoIncrement: true, required: true }
+    id_ronda: { phpName: IdRonda, type: INTEGER, size: '2', required: true, index: 'true' }
     id_jugador: { phpName: IdJugador, type: INTEGER, size: '11', required: true, foreignTable: hl_jugadores, foreignReference: id, onDelete: CASCADE, onUpdate: CASCADE }
     id_victima: { phpName: IdVictima, type: INTEGER, size: '11', required: true, foreignTable: hl_jugadores, foreignReference: id, onDelete: CASCADE, onUpdate: CASCADE }
     _indexes: { id_jugador: [id_jugador], id_victima: [id_victima] }

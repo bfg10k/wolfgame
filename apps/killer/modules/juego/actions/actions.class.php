@@ -44,6 +44,7 @@ class juegoActions extends sfActions {
 
         $estado = HlEstadoPeer::retrieveByPK(1);
         $fase = $estado->getFase();
+        $ronda = $estado->getRonda();
         switch($fase)
         {
           case "noche":
@@ -52,7 +53,9 @@ class juegoActions extends sfActions {
             else return "Generico";
             break;
           case "dia":
-            $this->votos = HlVotosPeer::doSelect(new Criteria());
+            $c = new Criteria();
+            $c->add(HlVotosPeer::ID_RONDA,$ronda);
+            $this->votos = HlVotosPeer::doSelect($c);
             $this->setTemplate("dia");
             if($jugador->esAlcalde()) return "Alcalde"; //Tiene botón de cerrar votaciones
             //elseif($jugador->esLobo()) return "Lobo"; //Que no pueda votar a los otros lobos
@@ -191,13 +194,17 @@ class juegoActions extends sfActions {
         }
         
         $id_victima = $request->getParameter('id_victima');
+        $estado = HlEstadoPeer::retrieveByPK(1);
+        $ronda = $estado->getRonda();
         $c = new Criteria();
         $c->add(HlVotosPeer::ID_JUGADOR,$id_jugador);
+        $c->add(HlVotosPeer::ID_RONDA,$ronda);
         $voto = HlVotosPeer::doSelectOne($c);
         if(!($voto instanceof HlVotos))
         {
           $voto = new HlVotos();
           $voto->setIdJugador($id_jugador);
+          $voto->setIdRonda($ronda);
         }
         $voto->setIdVictima($id_victima);
         $voto->save();
@@ -220,11 +227,13 @@ class juegoActions extends sfActions {
             $this->redirect('visitas/index');
         }
         
-               
+        $estado = HlEstadoPeer::retrieveByPK(1);
+        $ronda = $estado->getRonda();
         $conexion = Propel::getConnection();
 
         $sql = "SELECT hl_votos.id_victima as id_victima, count(*) as num_votos 
                 FROM hl_votos 
+                WHERE id_ronda = $ronda
                 GROUP BY id_victima
                 ORDER BY num_votos desc
                 LIMIT 1
@@ -238,6 +247,7 @@ class juegoActions extends sfActions {
      
         $sql = "SELECT hl_votos.id_victima as id_victima, count(*) as num_votos
                 FROM hl_votos 
+                WHERE id_ronda = $ronda
                 GROUP BY id_victima
                 having num_votos = $max_num_votos
                 ORDER BY num_votos desc
@@ -257,7 +267,6 @@ class juegoActions extends sfActions {
         {
           //Hay empate
           Juego::registraEvento('Se cierran las votaciones. Ha habido empate.');
-          $estado = HlEstadoPeer::retrieveByPK(1);
           $estado->setFase('desempate');
           $estado->save();
           $this->redirect('juego/index');
@@ -273,8 +282,6 @@ class juegoActions extends sfActions {
           {
             $victima->muere();
             $victima->save();
-            HlVotosPeer::doDeleteAll();
-            $estado = HlEstadoPeer::retrieveByPK(1);
             $estado->setRonda($estado->getRonda()+1);
             $estado->setFase('noche');
             $estado->setVidente(0);
@@ -312,7 +319,6 @@ class juegoActions extends sfActions {
         {
           $victima->muere();
           $victima->save();
-          HlVotosPeer::doDeleteAll();
           $estado = HlEstadoPeer::retrieveByPK(1);
           $estado->setRonda($estado->getRonda()+1);
           $estado->setFase('noche');
