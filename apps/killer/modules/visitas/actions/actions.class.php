@@ -22,7 +22,7 @@ class visitasActions extends sfActions
     $this->jugadores = HlJugadoresPeer::doSelect($c);
   }
   
-  public function executeRegistro(sfWebRequest $request)
+  public function executeRegistroX(sfWebRequest $request)
   {
       
       $criteria = new Criteria();
