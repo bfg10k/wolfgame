@@ -20,6 +20,8 @@ propel:
     ronda: { phpName: Ronda, type: INTEGER, size: '2', required: true }
     fase: { phpName: Fase, type: VARCHAR, size: '10', required: true }
     vidente: { phpName: Vidente, type: TINYINT, size: '1', required: true }
+    pocion_vida: { phpName: PocionVida, type: TINYINT, size: '1', required: true, defaultValue: '0' }
+    pocion_muerte: { phpName: PocionMuerte, type: TINYINT, size: '1', required: true, defaultValue: '0' }
   hl_jugadores:
     _attributes: { phpName: HlJugadores }
     id: { phpName: Id, type: INTEGER, size: '11', primaryKey: true, autoIncrement: true, required: true }
