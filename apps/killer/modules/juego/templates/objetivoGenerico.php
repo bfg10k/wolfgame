@@ -21,11 +21,11 @@
 
 <div id="content-objetivo" class="rounded-corners">
   <div>
-  Objetivo: Descubrir y sacrificar al hombre-lobo
+  <p>Objetivo: Descubrir y sacrificar al hombre-lobo</p>
   
-  Función: Cada nuevo día, mientras el hombre-lobo siga vivo, 
+  <p>Función: Cada nuevo día, mientras el hombre-lobo siga vivo, 
   debéis sacrificar al habitante del pueblo que creáis que es el hombre lobo. 
-  La elección de la persona sacrificada será mediante el sistema de votaciones.
+  La elección de la persona sacrificada será mediante el sistema de votaciones.</p>
   </div>
   
   <?php if($jugador->esAlcalde()):?>
@@ -55,6 +55,11 @@
   
   <?php if($jugador->esBruja()):?>
   <div>
+    <div>
+    <img id="card" class="pic-1" src="<?php echo image_path("bruja.jpg"); ?>" width="200" height="320" />
+    </div>
+      
+    <div id="rol">
     <dt>Rol</dt><dd>Bruja</dd>
   
     <div>Dispones de dos pociones de un único uso cada una. Solamente puedes utilizar una poción por ronda.</div>  
@@ -81,16 +86,22 @@
   
   <?php endif ?>
   
-  </div>
+
   <?php endif ?>
-  
+    </div>
+  </div>
   <?php if($jugador->esCazador()):?>
   <div>
+    <div>
+    <img id="card" class="pic-1" src="<?php echo image_path("cazador.jpg"); ?>" width="200" height="320" />
+    </div>
+      
+    <div id="rol">
     <dt>Rol</dt><dd>Cazador</dd>
   
   <dt>Escopeta</dt><dd>Cuando te maten, cómo acto reflejo tienes la posibilidad de 
     utilizar tu escopeta y matar a un jugador a tu elección. Tú morirás igualmente.</dd> 
-  
+    </div>
   </div>
   <?php endif ?>
   
