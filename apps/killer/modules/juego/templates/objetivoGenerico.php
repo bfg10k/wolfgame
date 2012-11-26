@@ -13,8 +13,9 @@
 <div id="nav-user">
     <ul class="nav nav-list">
     <li><a href="<?php echo url_for('juego/index'); ?>"><i class="icon-home"></i> Inicio</a></li>
-    <li class="active"><a href="<?php echo url_for('juego/objetivo'); ?>"><i class="icon-screenshot"></i>Tu personaje</a></li>
-    <li><a href="<?php echo url_for('juego/blog'); ?>"><i class="icon-eye-open"></i>INTEF News</a></li> 
+    <li class="active"><a href="<?php echo url_for('juego/objetivo'); ?>"><i class="icon-screenshot"></i> Tu personaje</a></li>
+    <li><a href="<?php echo url_for('juego/blog'); ?>"><i class="icon-book"></i> Bitácora</a></li>
+    <li><a href="<?php echo url_for('juego/historicoVotaciones'); ?>"><i class="icon-eye-open"></i> Votaciones</a></li> 
     </ul>
 </div>
   
@@ -107,11 +108,16 @@
   
   <?php if($jugador->estaEnamorado()):?>
   <div>
+    <div>
+    <img float="right" class="pic-2" src="<?php echo image_path("corazon.png"); ?>" width="80" />
+    </div>
+      
+    <div id="rol">
     <dt>Rol</dt><dd>Enamorado</dd>
   
   <div>Estás enamorado/a de: <?php echo $jugador->getAmante() ?>.
     Si <?php echo $jugador->getAmante()->getNombre() ?> muere, tú morirás de pena inmediatamente.</div> 
-  
+    </div>
   </div>
   <?php endif ?>
   
