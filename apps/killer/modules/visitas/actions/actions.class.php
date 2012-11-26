@@ -170,7 +170,7 @@ class visitasActions extends sfActions
       
       //Jugadores votados
       $sql = "SELECT DISTINCT id_victima
-              FROM hl_votos 
+              FROM hl_votos
              ;";
 
       $sentencia = $conexion->prepare($sql);
