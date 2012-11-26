@@ -461,22 +461,37 @@ class juegoActions extends sfActions {
         $this->jugador = $jugador;
         $this->nombre = $jugador->getNombre();
         
-        $c = new Criteria();
-        $c->addAscendingOrderByColumn(HlJugadoresPeer::NOMBRE);
-        $this->jugadores = HlJugadoresPeer::doSelect($c);
-        
-        $conexion = Propel::getConnection();
+        //Rondas en juego
+      $c = new Criteria();
+      $c->addAscendingOrderByColumn(HlJugadoresPeer::NOMBRE);
+      $this->jugadores = HlJugadoresPeer::doSelect($c);
 
-        $sql = "SELECT min(id_ronda) min_ronda, max(id_ronda) max_ronda
-                FROM hl_votos 
-               ;";
+      $conexion = Propel::getConnection();
 
-        $sentencia = $conexion->prepare($sql);
-        $sentencia->execute();
-                
-        $tRegistro = $sentencia->fetch();
-        $this->min_ronda = $tRegistro['min_ronda'];
-        $this->max_ronda = $tRegistro['max_ronda'];
+      $sql = "SELECT min(id_ronda) min_ronda, max(id_ronda) max_ronda
+              FROM hl_votos 
+             ;";
+
+      $sentencia = $conexion->prepare($sql);
+      $sentencia->execute();
+
+      $tRegistro = $sentencia->fetch();
+      $this->min_ronda = $tRegistro['min_ronda'];
+      $this->max_ronda = $tRegistro['max_ronda'];
+      
+      //Jugadores votados
+      $sql = "SELECT DISTINCT id_victima
+              FROM hl_votos
+             ;";
+
+      $sentencia = $conexion->prepare($sql);
+      $sentencia->execute();
+      $jugadores_votados = array();
+      while($tRegistro = $sentencia->fetch())
+      {
+        $jugadores_votados[$tRegistro['id_victima']] = HlJugadoresPeer::retrieveByPK($tRegistro['id_victima']);
+      }
+      $this->jugadores_votados = $jugadores_votados;
       
     }
     
