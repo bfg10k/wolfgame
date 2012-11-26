@@ -148,6 +148,30 @@ class visitasActions extends sfActions
 
   }
   
+  public function executeHistoricoVotaciones(sfWebRequest $request)
+  {
+      //Rondas en juego
+      $c = new Criteria();
+      $c->addAscendingOrderByColumn(HlJugadoresPeer::NOMBRE);
+      $this->jugadores = HlJugadoresPeer::doSelect($c);
+
+      $conexion = Propel::getConnection();
+
+      $sql = "SELECT min(id_ronda) min_ronda, max(id_ronda) max_ronda
+              FROM hl_votos 
+             ;";
+
+      $sentencia = $conexion->prepare($sql);
+      $sentencia->execute();
+
+      $tRegistro = $sentencia->fetch();
+      $this->min_ronda = $tRegistro['min_ronda'];
+      $this->max_ronda = $tRegistro['max_ronda'];
+      
+      //Jugadores votados
+
+  }
+  
   public function executeLogin(sfWebRequest $request)
   {
     $usuario = $request->getParameter('username',null);

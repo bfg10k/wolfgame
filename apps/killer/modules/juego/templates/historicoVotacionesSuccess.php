@@ -24,7 +24,7 @@
 </div>
 
 <h1>Votaciones</h1>
-  <?php for($ronda=$min_ronda;$ronda<=$max_ronda;$ronda++): ?>
+  <?php for($ronda=$max_ronda;$ronda>=$min_ronda;$ronda--): ?>
   <h3>Ronda <?php echo $ronda ?></h3>
   <?php $num_jugadores = count($jugadores);?>
     <table>
