@@ -169,7 +169,19 @@ class visitasActions extends sfActions
       $this->max_ronda = $tRegistro['max_ronda'];
       
       //Jugadores votados
+      $sql = "SELECT DISTINCT id_victima
+              FROM hl_votos 
+             ;";
 
+      $sentencia = $conexion->prepare($sql);
+      $sentencia->execute();
+      $jugadores_votados = array();
+      while($tRegistro = $sentencia->fetch())
+      {
+        $jugadores_votados[$tRegistro['id_victima']] = HlJugadoresPeer::retrieveByPK($tRegistro['id_victima']);
+      }
+      $this->jugadores_votados = $jugadores_votados;
+      
   }
   
   public function executeLogin(sfWebRequest $request)
