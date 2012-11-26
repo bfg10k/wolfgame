@@ -52,6 +52,29 @@ body {
 
 }
 
+
+
+.vertical{
+  border: 2px solid red;
+  width: 20px;
+  height: 15px;
+  line-height: 10px;
+  transform: rotate(90deg);
+  -ms-transform: rotate(90deg); /* IE 9 */
+  -webkit-transform: rotate(90deg); /* Safari and Chrome */
+  -o-transform: rotate(90deg); /* Opera */
+  -moz-transform: rotate(90deg); /* Firefox */
+}
+
+th, td{
+  width: 10px;
+  border: 1px solid #666666
+}
+
+.votado{
+  background-color: green;
+}
+
 #contador{
     display: block;
     padding-top: 30px;

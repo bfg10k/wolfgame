@@ -445,6 +445,41 @@ class juegoActions extends sfActions {
         return $salida;
     }
     
+    public function executeHistoricoVotaciones(sfWebRequest $request)
+    {
+        $id_jugador = $this->getUser()->getAttribute('user_id', null);
+        if (is_null($id_jugador))
+            $this->redirect('visitas/index');
+
+        $c = new Criteria();
+        $c->add(HlJugadoresPeer::ID, $id_jugador);
+        $jugador = HlJugadoresPeer::doSelectOne($c);
+        if (!($jugador instanceof HlJugadores)) {
+            $this->redirect('visitas/index');
+        }
+        
+        $this->jugador = $jugador;
+        $this->nombre = $jugador->getNombre();
+        
+        $c = new Criteria();
+        $c->addAscendingOrderByColumn(HlJugadoresPeer::NOMBRE);
+        $this->jugadores = HlJugadoresPeer::doSelect($c);
+        
+        $conexion = Propel::getConnection();
+
+        $sql = "SELECT min(id_ronda) min_ronda, max(id_ronda) max_ronda
+                FROM hl_votos 
+               ;";
+
+        $sentencia = $conexion->prepare($sql);
+        $sentencia->execute();
+                
+        $tRegistro = $sentencia->fetch();
+        $this->min_ronda = $tRegistro['min_ronda'];
+        $this->max_ronda = $tRegistro['max_ronda'];
+      
+    }
+    
     public function executeRenunciaHombrelobo()
     {
         $id_jugador = $this->getUser()->getAttribute('user_id', null);

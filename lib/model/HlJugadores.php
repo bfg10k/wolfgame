@@ -156,6 +156,15 @@ class HlJugadores extends BaseHlJugadores {
     else return "Este jugador ". implode(',', $roles);
   }
   
+  public function getVotoRonda($ronda)
+  {
+    $criteria = new Criteria();
+    $criteria->add(HlVotosPeer::ID_RONDA,$ronda);
+    $votos = $this->getHlVotossRelatedByIdJugador($criteria);
+    if(count($votos)>0) return $votos[0]->getIdVictima();
+    else return 0;
+  }
+  
   
   
  
