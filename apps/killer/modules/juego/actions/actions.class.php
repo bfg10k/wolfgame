@@ -200,7 +200,7 @@ class juegoActions extends sfActions {
     
     public function executeVotar(sfWebRequest $request)
     {
-      $id_jugador = $this->getUser()->getAttribute('user_id', null);
+        $id_jugador = $this->getUser()->getAttribute('user_id', null);
         if (is_null($id_jugador))
             $this->redirect('visitas/index');
 
@@ -227,7 +227,8 @@ class juegoActions extends sfActions {
         $voto->setIdVictima($id_victima);
         $voto->save();
         
-        Juego::registraEvento($jugador->getNombre().' ha votado.');
+        $victima = HlJugadoresPeer::retrieveByPK($id_victima);
+        Juego::registraEvento($jugador->getNombre().' ha votado a '.$victima->getNombre().'.');
         
         $this->redirect('juego/index');
     }
