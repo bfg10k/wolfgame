@@ -1,9 +1,11 @@
 <div id="nav">
     <ul class="nav nav-tabs">
         <li class="active"><a href="<?php echo url_for('visitas/index'); ?>">Jugadores</a></li>
-        <li><a href="<?php echo url_for('visitas/blog'); ?>">INTEF News</a></li>
+        <li><a href="<?php echo url_for('visitas/blog'); ?>">Bitácora</a></li>
         <li><a href="<?php echo url_for('visitas/normas'); ?>">Normativa</a></li>
         <li><a href="<?php echo url_for('visitas/historia'); ?>">Historia</a></li>
+        <li><a href="<?php echo url_for('visitas/historicoVotaciones'); ?>">Votaciones</a></li>
+
 
     </ul>
 </div>	
