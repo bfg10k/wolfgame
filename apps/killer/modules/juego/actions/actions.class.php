@@ -211,9 +211,19 @@ class juegoActions extends sfActions {
             $this->redirect('visitas/index');
         }
         
-        $id_victima = $request->getParameter('id_victima');
+        if ($jugador->getActivo() === 0) {
+            $this->redirect('visitas/index');
+        }
+        
+        
         $estado = HlEstadoPeer::retrieveByPK(1);
+        if($estado->getFase()!="dia")
+        {
+            $this->redirect('visitas/index');
+        }
+        
         $ronda = $estado->getRonda();
+        $id_victima = $request->getParameter('id_victima');
         $c = new Criteria();
         $c->add(HlVotosPeer::ID_JUGADOR,$id_jugador);
         $c->add(HlVotosPeer::ID_RONDA,$ronda);
