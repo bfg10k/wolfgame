@@ -12,10 +12,10 @@
   
 
 <div id="content-objetivo" class="rounded-corners">
-  
+  <h1>Votaciones</h1>
 </div>
 
-<h1>Votaciones</h1>
+<div style="width: 95%">
   <?php for($ronda=$max_ronda;$ronda>=$min_ronda;$ronda--): ?>
   <h3>Ronda <?php echo $ronda ?></h3>
     
@@ -46,6 +46,7 @@
   
   <?php endfor ?>
   
+</div>
    
 
   
