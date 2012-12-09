@@ -517,7 +517,7 @@ class juegoActions extends sfActions {
             $this->redirect('visitas/index');
         }
         
-        $this->redirect('juego/index'); //Inhabilitación del método
+        //$this->redirect('juego/index'); //Inhabilitación del método
 
         Juego::resetear();
         Juego::sortearLobo(2);
