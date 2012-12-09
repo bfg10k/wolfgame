@@ -78,11 +78,21 @@
     hipnotizar a otro jugador y votar en su lugar.</dd> 
 
     <div>
+      <?php if(is_null($jugador_hipnotizado)): ?>
       <form method="post" action="<?php echo url_for('juego/hipnotizar'); ?>">
         <label>Utilizar hipnosis con: </label>
         <?php echo $sf_data->getRaw('selectJugadoresVivos')->render('id_victima'); ?>  
         <button type="submit" class="btn btn-primary">Aceptar</button>
       </form>
+      <?php else: ?>
+        Has hipnotizado a: <?php echo $jugador_hipnotizado; ?>
+        <form method="post" action="<?php echo url_for('juego/votarHipnotizado');?>">
+          <label>Vota en lugar de la persona hipnotizada: </label>
+          <input type="hidden" name="id_hipnotizado" value="<?php echo $jugador_hipnotizado->getId() ?>" />
+          <?php echo $sf_data->getRaw('selectJugadoresVivos')->render('id_victima'); ?>     
+          <button type="submit" class="btn btn-primary">Votar</button>
+        </form>
+      <?php endif ?>
     </div>
   
     </div>
@@ -104,7 +114,7 @@
     <div>
       <form method="post" action="<?php echo url_for('juego/proteger'); ?>">
         <label>Proteger a: </label>
-        <?php echo $sf_data->getRaw('selectJugadoresVivos')->render('id_victima',$jugador_protegido->getId()); ?>  
+        <?php echo $sf_data->getRaw('selectJugadoresVivos')->render('id_victima',$id_protegido); ?>  
         <button type="submit" class="btn btn-primary">Aceptar</button>
       </form>
     </div>

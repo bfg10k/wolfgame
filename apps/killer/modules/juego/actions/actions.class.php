@@ -68,6 +68,7 @@ class juegoActions extends sfActions {
 
             $sql = "SELECT hl_votos.id_victima as id_victima, count(*) as num_votos 
                     FROM hl_votos 
+                    WHERE id_ronda = $ronda
                     GROUP BY id_victima
                     ORDER BY num_votos desc
                     LIMIT 1
@@ -81,6 +82,7 @@ class juegoActions extends sfActions {
 
             $sql = "SELECT hl_votos.id_victima as id_victima, count(*) as num_votos
                     FROM hl_votos 
+                    WHERE id_ronda = $ronda
                     GROUP BY id_victima
                     having num_votos = $max_num_votos
                     ORDER BY num_votos desc
@@ -153,7 +155,15 @@ class juegoActions extends sfActions {
         {
           $c = new Criteria();
           $c->add(HlJugadoresPeer::PROTEGIDO,$jugador->getGuardaespaldas());
-          $this->jugador_protegido = HlJugadoresPeer::doSelectOne($c);
+          $protegido = HlJugadoresPeer::doSelectOne($c);
+          if($protegido instanceof HlJugadores)
+          {
+            $this->id_protegido = $protegido->getId();
+          }
+          else
+          {
+            $this->id_protegido = null;
+          }
         }
         
         if($jugador->esHipnotizador()) 
@@ -254,6 +264,52 @@ class juegoActions extends sfActions {
         {
           $voto = new HlVotos();
           $voto->setIdJugador($id_jugador);
+          $voto->setIdRonda($ronda);
+        }
+        $voto->setIdVictima($id_victima);
+        $voto->save();
+        
+        $victima = HlJugadoresPeer::retrieveByPK($id_victima);
+        Juego::registraEvento($jugador->getNombre().' ha votado a '.$victima->getNombre().'.');
+        
+        $this->redirect('juego/index');
+    }
+    
+    public function executeVotarHipnotizado(sfWebRequest $request)
+    {
+        $id_jugador = $this->getUser()->getAttribute('user_id', null);
+        if (is_null($id_jugador))
+            $this->redirect('visitas/index');
+
+        $c = new Criteria();
+        $c->add(HlJugadoresPeer::ID, $id_jugador);
+        $jugador = HlJugadoresPeer::doSelectOne($c);
+        if (!($jugador instanceof HlJugadores)) {
+            $this->redirect('visitas/index');
+        }
+        
+        if ($jugador->getActivo() === 0) {
+            $this->redirect('visitas/index');
+        }
+        
+        
+        $estado = HlEstadoPeer::retrieveByPK(1);
+        if($estado->getFase()!="dia")
+        {
+            $this->redirect('visitas/index');
+        }
+        
+        $ronda = $estado->getRonda();
+        $id_hipnotizado = $request->getParameter('id_hipnotizado');
+        $id_victima = $request->getParameter('id_victima');
+        $c = new Criteria();
+        $c->add(HlVotosPeer::ID_JUGADOR,$id_hipnotizado);
+        $c->add(HlVotosPeer::ID_RONDA,$ronda);
+        $voto = HlVotosPeer::doSelectOne($c);
+        if(!($voto instanceof HlVotos))
+        {
+          $voto = new HlVotos();
+          $voto->setIdJugador($id_hipnotizado);
           $voto->setIdRonda($ronda);
         }
         $voto->setIdVictima($id_victima);

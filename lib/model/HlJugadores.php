@@ -108,10 +108,14 @@ class HlJugadores extends BaseHlJugadores {
   {
     //Desproteger al protegido anterior
     $criteria = new Criteria();
-    $criteria->add(HlJugadoresPeer::PROTEGIDO,$this->getProtegido());
-    $protegido = HlJugadoresPeer::doSelectOne($criteria);
-    $protegido->setProtegido(0);
-    $protegido->save();
+    $criteria->add(HlJugadoresPeer::PROTEGIDO,$this->getGuardaespaldas());
+    $protegidos = HlJugadoresPeer::doSelect($criteria);
+    foreach($protegidos as $protegido)
+    {
+      $protegido->setProtegido(0);
+      $protegido->save();
+    }
+    
   }
   
   public function estaProtegido()
@@ -134,9 +138,12 @@ class HlJugadores extends BaseHlJugadores {
     //Desproteger al protegido anterior
     $criteria = new Criteria();
     $criteria->add(HlJugadoresPeer::HIPNOTIZADO,$this->getHipnotizador());
-    $victima = HlJugadoresPeer::doSelectOne($criteria);
-    $victima->setHipnotizado(0);
-    $victima->save();
+    $victimas = HlJugadoresPeer::doSelect($criteria);
+    foreach($victimas as $victima)
+    {
+      $victima->setHipnotizado(0);
+      $victima->save();
+    }
   }
   
   public function estaHipnotizado()
