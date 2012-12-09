@@ -468,7 +468,6 @@ class juegoActions extends sfActions {
         {
           //Se protege al jugador elegido
           $jugador->proteger($victima);
-          $jugador->setAccion(0);
           $jugador->save();
           $this->redirect('juego/objetivo');
         }
