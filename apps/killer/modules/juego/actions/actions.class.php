@@ -149,6 +149,22 @@ class juegoActions extends sfActions {
         $c->addAscendingOrderByColumn(HlJugadoresPeer::NOMBRE);
         $this->selectJugadoresMuertos = new sfWidgetFormPropelChoice(array('model'=>'HlJugadores','criteria'=>$c));
 
+        if($jugador->esGuardaespaldas()) 
+        {
+          $c = new Criteria();
+          $c->add(HlJugadoresPeer::PROTEGIDO,$jugador->getGuardaespaldas());
+          $this->jugador_protegido = HlJugadoresPeer::doSelectOne($c);
+        }
+        
+        if($jugador->esHipnotizador()) 
+        {
+          $c = new Criteria();
+          $c->add(HlJugadoresPeer::HIPNOTIZADO,$jugador->getHipnotizador());
+          $this->jugador_hipnotizado = HlJugadoresPeer::doSelectOne($c);
+        }
+        
+        
+        
         $this->setTemplate('objetivo');
         if($jugador->esHombrelobo()) 
         {

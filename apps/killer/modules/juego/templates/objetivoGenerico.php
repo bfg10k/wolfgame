@@ -104,7 +104,7 @@
     <div>
       <form method="post" action="<?php echo url_for('juego/proteger'); ?>">
         <label>Proteger a: </label>
-        <?php echo $sf_data->getRaw('selectJugadoresVivos')->render('id_victima'); ?>  
+        <?php echo $sf_data->getRaw('selectJugadoresVivos')->render('id_victima',$jugador_protegido->getId()); ?>  
         <button type="submit" class="btn btn-primary">Aceptar</button>
       </form>
     </div>
