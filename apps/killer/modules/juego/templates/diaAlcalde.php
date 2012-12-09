@@ -21,12 +21,16 @@
   
 
 <div id="content-objetivo" class="rounded-corners">
+  <?php if($jugador->estaHipnotizado()): ?>
+  <div>¡Estás hipnotizado! El hipnotizador votará en esta ronda por ti.</div>
+  <?php else: ?>
   <form method="post" action="<?php echo url_for('juego/votar');?>">
     <label>Elige a la persona que creas que es el licántropo: </label>
     <?php echo $sf_data->getRaw('selectJugadoresVivos')->render('id_victima'); ?>     
     <button type="submit" class="btn btn-primary">Votar</button>
   </form>
   Puedes cambiar de voto todas las veces que quieras mientras esté abierto el periodo de votación.
+  <?php endif ?>
   <div>
     <h3>Votaciones</h3>
     <div>

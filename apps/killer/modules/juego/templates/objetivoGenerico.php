@@ -21,13 +21,18 @@
   
 
 <div id="content-objetivo" class="rounded-corners">
+
+  <?php if($jugador->esEndemoniado()):?>
   <div>
-  <p>Objetivo: Descubrir y sacrificar al hombre-lobo</p>
-  
-  <p>Función: Cada nuevo día, mientras el hombre-lobo siga vivo, 
-  debéis sacrificar al habitante del pueblo que creáis que es el hombre lobo. 
-  La elección de la persona sacrificada será mediante el sistema de votaciones.</p>
+    <dt>Rol</dt><dd>Endemoniado</dd>
+    <p>Objetivo: Ganas si ganan los hombres-lobo.</p>
   </div>
+  <?php else: ?>
+  <div>
+    <dt>Rol</dt><dd>Pueblo</dd>
+    <p>Objetivo: Descubrir y sacrificar al hombre-lobo.</p>
+  </div>
+  <?php endif ?>
   
   <?php if($jugador->esAlcalde()):?>
   <div>
@@ -51,6 +56,54 @@
     <div>
       <form method="post" action="<?php echo url_for('juego/videncia'); ?>">
         <label>Utilizar videncia con: </label>
+        <?php echo $sf_data->getRaw('selectJugadoresVivos')->render('id_victima'); ?>  
+        <button type="submit" class="btn btn-primary">Aceptar</button>
+      </form>
+    </div>
+  
+    </div>
+  </div>
+  <?php endif ?>
+  
+  <?php if($jugador->esHipnotizador()):?>
+  <div>
+    <div>
+    <img id="card" class="pic-1" src="<?php echo image_path("hipnotizador.jpg"); ?>" width="200" height="320" />
+    </div>
+    
+    <div id="rol">
+    <dt>Rol</dt><dd>Hipnotizador</dd>
+  
+    <dt>Hipnosis</dt><dd> Una vez cada día puedes utilizar tus poderes de hipnosis para 
+    hipnotizar a otro jugador y votar en su lugar.</dd> 
+
+    <div>
+      <form method="post" action="<?php echo url_for('juego/hipnotizar'); ?>">
+        <label>Utilizar hipnosis con: </label>
+        <?php echo $sf_data->getRaw('selectJugadoresVivos')->render('id_victima'); ?>  
+        <button type="submit" class="btn btn-primary">Aceptar</button>
+      </form>
+    </div>
+  
+    </div>
+  </div>
+  <?php endif ?>
+  
+  <?php if($jugador->esGuardaespaldas()):?>
+  <div>
+    <div>
+    <img id="card" class="pic-1" src="<?php echo image_path("guardaespaldas.jpg"); ?>" width="200" height="320" />
+    </div>
+    
+    <div id="rol">
+    <dt>Rol</dt><dd>Guardaespaldas</dd>
+  
+    <dt>Protección</dt><dd> Puedes elegir a un jugador para protegerle durante la noche. Si un lobo 
+    intentar matar a la persona protegida, huirá sin poder matar.</dd> 
+
+    <div>
+      <form method="post" action="<?php echo url_for('juego/proteger'); ?>">
+        <label>Proteger a: </label>
         <?php echo $sf_data->getRaw('selectJugadoresVivos')->render('id_victima'); ?>  
         <button type="submit" class="btn btn-primary">Aceptar</button>
       </form>

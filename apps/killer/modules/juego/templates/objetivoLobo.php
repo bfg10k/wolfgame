@@ -51,6 +51,21 @@
     </div>
   <?php endif ?>
   
+  <?php if($jugador->estaEnamorado()):?>
+  <div>
+    <div>
+    <img float="right" class="pic-2" src="<?php echo image_path("corazon.png"); ?>" width="80" />
+    </div>
+      
+    <div id="rol">
+    <dt>Rol</dt><dd>Enamorado</dd>
+  
+  <div>Estás enamorado/a de: <?php echo $jugador->getAmante() ?>.
+    Si <?php echo $jugador->getAmante()->getNombre() ?> muere, tú morirás de pena inmediatamente.</div> 
+    </div>
+  </div>
+  <?php endif ?>
+  
 </div>
 
   

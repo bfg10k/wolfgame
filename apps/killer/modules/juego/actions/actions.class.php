@@ -176,23 +176,29 @@ class juegoActions extends sfActions {
             $this->redirect('visitas/index');
         }
         
-        /** @todo verificar que el jugador es un hombre lobo */
+        if($jugador->getActivo() === 0) $this->redirect('visitas/index');
+        if(!$jugador->esHombrelobo()) $this->redirect('visitas/index');
+        
         $id_victima = $request->getParameter('id_victima');
         $victima = HlJugadoresPeer::retrieveByPK($id_victima);
         if($victima instanceof HlJugadores)
         {
-          Juego::registraEvento('Un hombre lobo ha matado.');
-          $victima->muere();
-          $victima->save();
-          $jugador->setAccion(0); //Indica que ya ha matado
-          $jugador->save();
-          if(Juego::todosLobosHanJugado())
+          if($victima->estaProtegido())
           {
-            $estado = HlEstadoPeer::retrieveByPK(1);
-            if(Juego::cazadorAcabaDeMorir()) $estado->setFase('cazador');
-            else $estado->setFase('dia');
-            $estado->save();
+            Juego::registraEvento('Un hombre lobo ha intentado matar.');
+            Juego::registraEvento('El hombre lobo ha huído sin conseguir matar.');
+            $jugador->setAccion(0); //Indica que ya ha utilizado su acción de matar
+            $jugador->save();
           }
+          else
+          {
+            Juego::registraEvento('Un hombre lobo ha matado.');
+            $victima->muere();
+            $victima->save();
+            $jugador->setAccion(0); //Indica que ya ha matado
+            $jugador->save();
+          }
+          Juego::nextFase();   
         }
         
         $this->redirect('juego/index');
@@ -407,6 +413,97 @@ class juegoActions extends sfActions {
           return "Success";
         }
     }
+    
+    public function executeProteger(sfWebRequest $request)
+    {
+        $id_jugador = $this->getUser()->getAttribute('user_id', null);
+        if (is_null($id_jugador))
+            $this->redirect('visitas/index');
+
+        $c = new Criteria();
+        $c->add(HlJugadoresPeer::ID, $id_jugador);
+        $jugador = HlJugadoresPeer::doSelectOne($c);
+        if (!($jugador instanceof HlJugadores)) {
+            $this->redirect('visitas/index');
+        }
+        
+        $this->jugador = $jugador;
+        $this->nombre = $jugador->getNombre();
+        
+        if($jugador->getActivo() === 0) $this->redirect('visitas/index');
+        if(!$jugador->esGuardaespaldas()) $this->redirect('visitas/index');
+        
+        //La acción de protección se puede cambiar tanto de día como de noche
+        //Justo cuando mate el hombre lobo es cuando se mira si la víctima está protegida o no
+        $id_victima = $request->getParameter('id_victima');
+        $victima = HlJugadoresPeer::retrieveByPK($id_victima);
+        $estado = HlEstadoPeer::retrieveByPK(1);
+        if(!($victima instanceof HlJugadores))
+        {
+          $this->mensaje = "Error en la elección de la víctima.";
+          return "Error";
+        }
+        elseif($victima->getActivo() === 0)
+        {
+          $this->mensaje = "Debes elegir un jugador que todavía esté activo.";
+          return "Error";
+        }
+        else
+        {
+          //Se protege al jugador elegido
+          $jugador->proteger($victima);
+          $jugador->setAccion(0);
+          $jugador->save();
+          $this->redirect('juego/objetivo');
+        }
+    }
+    
+    public function executeHipnotizar(sfWebRequest $request)
+    {
+        $id_jugador = $this->getUser()->getAttribute('user_id', null);
+        if (is_null($id_jugador))
+            $this->redirect('visitas/index');
+
+        $c = new Criteria();
+        $c->add(HlJugadoresPeer::ID, $id_jugador);
+        $jugador = HlJugadoresPeer::doSelectOne($c);
+        if (!($jugador instanceof HlJugadores)) {
+            $this->redirect('visitas/index');
+        }
+        
+        $this->jugador = $jugador;
+        $this->nombre = $jugador->getNombre();
+        
+        if($jugador->getActivo() === 0) $this->redirect('visitas/index');
+        if(!$jugador->esHipnotizador()) $this->redirect('visitas/index');
+        
+        $id_victima = $request->getParameter('id_victima');
+        $victima = HlJugadoresPeer::retrieveByPK($id_victima);
+        $estado = HlEstadoPeer::retrieveByPK(1);
+        if($jugador->getAccion()==0)
+        {
+          $this->mensaje = "Ya has utilizado la hipnosis en este turno";
+          return "Error";
+        }
+        elseif(!($victima instanceof HlJugadores))
+        {
+          $this->mensaje = "Error en la elección de la víctima.";
+          return "Error";
+        }
+        elseif($victima->getActivo() === 0)
+        {
+          $this->mensaje = "Debes elegir un jugador que todavía esté activo.";
+          return "Error";
+        }
+        else
+        {
+          //Se protege al jugador elegido
+          $jugador->hipnotizar($victima);
+          $jugador->setAccion(0);
+          $jugador->save();
+          $this->redirect('juego/objetivo');
+        }
+    }
 
     public function executeSortear(sfWebRequest $request) {
         $id_jugador = $this->getUser()->getAttribute('user_id', null);
@@ -429,6 +526,9 @@ class juegoActions extends sfActions {
         Juego::sortearVidente(1);
         Juego::sortearBruja(1);
         Juego::sortearCazador(1);
+        Juego::sortearGuardaespaldas(1);
+        Juego::sortearEndemoniado(1);
+        Juego::sortearHipnotizador(1);
         Juego::activarHombresLobo();
         Juego::activarVidencia();
         Juego::activarBrujeria();

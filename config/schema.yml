@@ -40,10 +40,14 @@ propel:
     enamorado: { phpName: Enamorado, type: INTEGER, size: '1', required: true, defaultValue: '0' }
     bruja: { phpName: Bruja, type: TINYINT, size: '1', required: true, defaultValue: '0' }
     cazador: { phpName: Cazador, type: TINYINT, size: '1', required: true, defaultValue: '0' }
+    guardaespaldas: { phpName: Guardaespaldas, type: TINYINT, size: '1', required: true, defaultValue: '0' }
+    endemoniado: { phpName: Endemoniado, type: TINYINT, size: '1', required: true, defaultValue: '0' }
+    hipnotizador: { phpName: Hipnotizador, type: TINYINT, size: '1', required: true, defaultValue: '0' }
     enfermo: { phpName: Enfermo, type: TINYINT, size: '1', required: true, defaultValue: '0' }
-    puta: { phpName: Puta, type: TINYINT, size: '1', required: true, defaultValue: '0' }
+    protegido: { phpName: Protegido, type: TINYINT, size: '1', required: true, defaultValue: '0' }
+    hipnotizado: { phpName: Hipnotizado, type: TINYINT, size: '1', required: true, defaultValue: '0' }
     accion: { phpName: Accion, type: TINYINT, size: '1', required: true, defaultValue: '0' }
-    _indexes: { id_departamento: [id_departamento], hombrelobo: [hombrelobo, alcalde, vidente, enamorado, bruja, cazador, enfermo, puta] }
+    _indexes: { id_departamento: [id_departamento], hombrelobo: [hombrelobo, alcalde, vidente, enamorado, bruja, cazador, enfermo, protegido] }
   hl_noticias:
     _attributes: { phpName: HlNoticias }
     id: { phpName: Id, type: INTEGER, size: '11', primaryKey: true, autoIncrement: true, required: true }

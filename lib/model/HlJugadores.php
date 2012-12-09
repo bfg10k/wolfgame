@@ -79,9 +79,69 @@ class HlJugadores extends BaseHlJugadores {
     return $this->getBruja() > 0;
   }
   
-  public function esPuta()
+  public function esGuardaespaldas()
   {
-    return $this->getPuta() > 0;
+    return $this->getGuardaespaldas() > 0;
+  }
+  
+  public function esEndemoniado()
+  {
+    return $this->getEndemoniado() > 0;
+  }
+  
+  public function esHipnotizador()
+  {
+    return $this->getHipnotizador() > 0;
+  }
+  
+  public function proteger($protegido)
+  {
+    //Desproteger al protegido anterior
+    $this->desproteger();
+    
+    //Proteger al nuevo (Se marca el número de guardaespaldas por si hubiera más de uno)
+    $protegido->setProtegido($this->getGuardaespaldas());
+    $protegido->save();
+  }
+  
+  public function desproteger()
+  {
+    //Desproteger al protegido anterior
+    $criteria = new Criteria();
+    $criteria->add(HlJugadoresPeer::PROTEGIDO,$this->getProtegido());
+    $protegido = HlJugadoresPeer::doSelectOne($criteria);
+    $protegido->setProtegido(0);
+    $protegido->save();
+  }
+  
+  public function estaProtegido()
+  {
+    return $this->getProtegido() > 0;
+  }
+  
+  public function hipnotizar(HLJugadores $victima)
+  {
+    //Deshipnotizar al hipnotizado anterior
+    $this->deshipnotizar();
+    
+    //Hipnotizar al nuevo (Se marca el número de guardaespaldas por si hubiera más de uno)
+    $victima->setHipnotizado($this->getHipnotizador());
+    $victima->save();
+  }
+  
+  public function deshipnotizar()
+  {
+    //Desproteger al protegido anterior
+    $criteria = new Criteria();
+    $criteria->add(HlJugadoresPeer::HIPNOTIZADO,$this->getHipnotizador());
+    $victima = HlJugadoresPeer::doSelectOne($criteria);
+    $victima->setHipnotizado(0);
+    $victima->save();
+  }
+  
+  public function estaHipnotizado()
+  {
+    return $this->getHipnotizado() > 0;
   }
   
   public function estaEnfermo()
@@ -130,6 +190,20 @@ class HlJugadores extends BaseHlJugadores {
       Juego::sortearAlcalde();
       $this->save();
     } 
+    if($this->esEndemoniado()) 
+    {
+      Juego::registraEvento($this->getNombre().' era: Endemoniado.');
+    } 
+    if($this->esGuardaespaldas()) 
+    {
+      Juego::registraEvento($this->getNombre().' era: Guardaespaldas.');
+      $this->desproteger();
+    } 
+    if($this->esHipnotizador()) 
+    {
+      Juego::registraEvento($this->getNombre().' era: Hipnotizador.');
+      $this->deshipnotizar();
+    } 
     
   }
   
@@ -147,7 +221,9 @@ class HlJugadores extends BaseHlJugadores {
     if($this->esBruja()) $roles[] = "es Bruja";
     if($this->esCazador()) $roles[] = "es Cazador";
     if($this->esHombrelobo()) $roles[] = "es Hombre Lobo";
-    if($this->esPuta()) $roles[] = "es Puta";
+    if($this->esGuardaespaldas()) $roles[] = "es Guardaespaldas";
+    if($this->esEndemoniado()) $roles[] = "es Endemoniado";
+    if($this->esHipnotizador()) $roles[] = "es Hipnotizador";
     if($this->esVidente()) $roles[] = "es Vidente";
     if($this->estaEnamorado()) $roles[] = "está Enamorado de ".$this->getAmante()->getNombre();
     if($this->estaEnfermo()) $roles[] = "está Enfermo";
