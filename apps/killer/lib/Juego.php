@@ -335,6 +335,32 @@ class Juego {
     }
   }
   
+  public static function activarHipnosis()
+  {
+    $c = new Criteria();
+    $c->add(HlJugadoresPeer::ACTIVO,1);
+    $c->add(HlJugadoresPeer::HIPNOTIZADOR,1,CRITERIA::GREATER_EQUAL);
+    $hipnotizadores = HlJugadoresPeer::doSelect($c);
+    foreach ($hipnotizadores as $hipnotizador)
+    {
+      $hipnotizador->setAccion(1);
+      $hipnotizador->save();
+    }
+  }
+  
+  public static function deshipnotizarJugadores()
+  {
+    $c = new Criteria();
+    $c->add(HlJugadoresPeer::ACTIVO,1);
+    $c->add(HlJugadoresPeer::HIPNOTIZADO,1,CRITERIA::GREATER_EQUAL);
+    $hipnotizados = HlJugadoresPeer::doSelect($c);
+    foreach ($hipnotizados as $hipnotizado)
+    {
+      $hipnotizado->setHipnotizado(0);
+      $hipnotizado->save();
+    }
+  }
+  
   public static function activarVidencia()
   {
     $estado = HlEstadoPeer::retrieveByPK(1);

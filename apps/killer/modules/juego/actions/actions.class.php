@@ -296,7 +296,7 @@ class juegoActions extends sfActions {
         $estado = HlEstadoPeer::retrieveByPK(1);
         if($estado->getFase()!="dia")
         {
-            $this->redirect('visitas/index');
+            $this->redirect('juego/index');
         }
         
         $ronda = $estado->getRonda();
@@ -396,6 +396,8 @@ class juegoActions extends sfActions {
             Juego::activarHombresLobo();
             Juego::activarVidencia();
             Juego::activarBrujeria();
+            Juego::deshipnotizarJugadores();
+            Juego::activarHipnosis();
           }
           $this->redirect('juego/index');
         }
@@ -436,6 +438,8 @@ class juegoActions extends sfActions {
           Juego::activarHombresLobo();
           Juego::activarVidencia();
           Juego::activarBrujeria();
+          Juego::deshipnotizarJugadores();
+          Juego::activarHipnosis();
         }
         $this->redirect('juego/index');
         /** @todo escribir muerte en el blog */
