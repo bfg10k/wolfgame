@@ -315,8 +315,9 @@ class juegoActions extends sfActions {
         $voto->setIdVictima($id_victima);
         $voto->save();
         
+        $jugador_hipnotizado = HlJugadoresPeer::retrieveByPK($id_hipnotizado);
         $victima = HlJugadoresPeer::retrieveByPK($id_victima);
-        Juego::registraEvento($jugador->getNombre().' ha votado a '.$victima->getNombre().'.');
+        Juego::registraEvento($jugador_hipnotizado->getNombre().' ha votado a '.$victima->getNombre().'.');
         
         $this->redirect('juego/index');
     }
