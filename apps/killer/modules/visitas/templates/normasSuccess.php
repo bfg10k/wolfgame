@@ -51,8 +51,11 @@
     
 <p><strong>Cazador/a:</strong> Nadie sabe quien es. Participa en los debates y votaciones como uno más. Cuando un licántropo mata a un cazador/a, el cazador puede disparar con su escopeta a un jugador a su elección y matarlo. El Cazador/a no puede ser licántrop@.</p>
 
+<p><strong>Guardaespaldas:</strong> Nadie sabe quien es. Participa en los debates y votaciones como uno más. Puede elegir cada día a un jugador para protegerle por la noche. Si el lobo intenta matar al protegido, fracasará en el intento. El Guardaespaldas no puede ser licántrop@.</p>
 
+<p><strong>Hipnotizador/a:</strong> Nadie sabe quien es. Participa en los debates y votaciones como uno más. Puede elegir cada día a un jugador para hipnotizarle y votar en su lugar. El Hipnotizador/a no puede ser licántrop@.</p>
 
+<p><strong>Endemoniad@:</strong> Nadie sabe quien es. Participa en los debates y votaciones como uno más. No tiene ninguna habilidad ni conocimiento especial sobre el resto de jugadores. Simplemente está loc@ y quiere que ganen los licántrop@s.</p>
 
 
 </div>
