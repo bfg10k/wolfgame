@@ -86,11 +86,12 @@ class Juego {
       $jugador->setCazador(0);
       $jugador->setEnamorado(0);
       $jugador->setEnfermo(0);
-      $jugador->setProtegido(0);
       $jugador->setVidente(0);
       $jugador->setGuardaespaldas(0);
+      $jugador->setProtegido(0);
       $jugador->setEndemoniado(0);
       $jugador->setHipnotizador(0);
+      $jugador->setHipnotizado(0);
       $jugador->save();
     }
   }

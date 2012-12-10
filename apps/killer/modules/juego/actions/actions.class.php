@@ -596,18 +596,19 @@ class juegoActions extends sfActions {
         //$this->redirect('juego/index'); //Inhabilitación del método
 
         Juego::resetear();
-        Juego::sortearLobo(5);
-        Juego::sortearAlcalde(5);
-        Juego::sortearEnamorados(4); //Número de parejas
+        Juego::sortearLobo(2);
+        Juego::sortearAlcalde(1);
+        Juego::sortearEnamorados(2); //Número de parejas
         Juego::sortearVidente(1);
         Juego::sortearBruja(1);
-        Juego::sortearCazador(3);
-        Juego::sortearGuardaespaldas(3);
+        Juego::sortearCazador(1);
+        Juego::sortearGuardaespaldas(1);
         Juego::sortearEndemoniado(1);
         Juego::sortearHipnotizador(1);
         Juego::activarHombresLobo();
         Juego::activarVidencia();
         Juego::activarBrujeria();
+        Juego::activarHipnosis();
 
         $this->redirect('juego/index');
     }
