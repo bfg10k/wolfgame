@@ -25,7 +25,7 @@
 </div>
 
 <div id="content-objetivo" class="rounded-corners" style="width: 95%">
-  <?php if(count($jugadores_votados)>0) ?>
+  <?php if(count($jugadores_votados)>0): ?>
   <?php for($ronda=$max_ronda;$ronda>=$min_ronda;$ronda--): ?>
   <h3>Ronda <?php echo $ronda ?></h3>
     
